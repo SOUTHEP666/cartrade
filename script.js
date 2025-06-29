@@ -34,6 +34,10 @@ function renderCars(data) {
         <h3>${car.brand}</h3>
         <p>${car.description}</p>
         <div class="price">¥${car.price.toLocaleString()}</div>
+        <a class="contact-btn" target="_blank"
+          href="https://wa.me/8562099194058?text=你好，我想了解一下 ${car.brand}">
+          联系卖家
+        </a>
       </div>
     `;
     carList.appendChild(card);
