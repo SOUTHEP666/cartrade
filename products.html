@@ -111,7 +111,6 @@
       font-size: 1.2em;
       font-weight: bold;
       color: #00ffe0;
-      transition: color 0.3s ease;
     }
     .product-card:hover h3 {
       color: #00ffbb;
@@ -139,9 +138,49 @@
       transform: scale(1.05);
       box-shadow: 0 6px 18px rgba(0, 255, 200, 0.8);
     }
-    @media (max-width: 500px) {
+
+    /* 📱 响应式布局 */
+    @media (max-width: 1024px) {
+      main {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        padding: 30px 15px;
+        gap: 24px;
+      }
+      .product-card img {
+        height: 140px;
+      }
+    }
+    @media (max-width: 768px) {
+      header {
+        padding: 30px 15px;
+      }
       header h1 {
-        font-size: 1.8em;
+        font-size: 1.6em;
+      }
+      input[type="text"], input[type="number"] {
+        width: 90% !important;
+        font-size: 1em;
+      }
+      .lang-buttons button {
+        padding: 5px 10px;
+        font-size: 0.9em;
+      }
+      .back-home {
+        padding: 10px 20px;
+        font-size: 0.95em;
+      }
+      .product-card img {
+        height: 120px;
+      }
+    }
+    @media (max-width: 500px) {
+      main {
+        grid-template-columns: 1fr;
+        padding: 20px 10px;
+        gap: 20px;
+      }
+      .product-card img {
+        height: 180px;
       }
     }
   </style>
@@ -233,17 +272,14 @@ let filteredList = [...productList];
 
 function applyTranslations(lang) {
   const dict = translations[lang] || translations.zh;
-
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (typeof dict[key] === 'string') el.textContent = dict[key];
   });
-
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');
     if (dict[key]) el.placeholder = dict[key];
   });
-
   const totalPages = Math.ceil(filteredList.length / itemsPerPage);
   document.getElementById('pageInfo').innerText = dict.page_info(currentPage, totalPages);
   document.title = dict.title || document.title;
@@ -264,7 +300,6 @@ function renderProducts() {
 
   const container = document.getElementById('productContainer');
   container.innerHTML = '';
-
   items.forEach(product => {
     const card = document.createElement('div');
     card.className = 'product-card';
@@ -312,7 +347,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const lang = localStorage.getItem('siteLang') || 'zh';
   applyTranslations(lang);
   renderProducts();
-
   document.getElementById('searchInput').addEventListener('input', filterProducts);
   document.getElementById('minPrice').addEventListener('input', filterProducts);
   document.getElementById('maxPrice').addEventListener('input', filterProducts);
