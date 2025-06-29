@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>商品 - 老挝交易通</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0f0f1a;
+      color: #ffffff;
+      padding-bottom: 80px;
+    }
+
+    header {
+      background: linear-gradient(to right, #00ffae, #00bfff);
+      color: #000;
+      padding: 40px 20px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 255, 200, 0.4);
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      text-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 1em;
+      color: #000;
+      text-decoration: none;
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 6px 14px;
+      border-radius: 20px;
+      transition: background 0.3s;
+    }
+
+    .back-link:hover {
+      background-color: #e0f7f5;
+    }
+
+    .filters {
+      max-width: 1200px;
+      margin: 30px auto 10px;
+      padding: 0 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .filters input,
+    .filters select {
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: none;
+      font-size: 1em;
+      outline: none;
+      background-color: #1c1c2c;
+      color: #00ffe0;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .product-card {
+      background: #1a1a2c;
+      border-radius: 18px;
+      overflow: hidden;
+      padding: 20px;
+      box-shadow: 0 0 12px rgba(0, 255, 255, 0.1);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      border: 1px solid rgba(0,255,255,0.2);
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 10px 25px rgba(0, 255, 255, 0.3);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .product-card h3 {
+      color: #00ffe0;
+      font-size: 1.3em;
+      margin-bottom: 8px;
+    }
+
+    .product-card p {
+      margin: 4px 0;
+      color: #cfd8dc;
+    }
+
+    .whatsapp-btn {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 16px;
+      background: linear-gradient(to right, #00ffae, #00bfff);
+      color: #000;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 25px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .whatsapp-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0, 255, 200, 0.6);
+    }
+
+    .pagination {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .pagination a {
+      display: inline-block;
+      margin: 0 8px;
+      padding: 8px 14px;
+      background: #1c1c2c;
+      color: #00ffe0;
+      text-decoration: none;
+      border-radius: 8px;
+      border: 1px solid #00ffe0;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .pagination a:hover {
+      background: #00ffe0;
+      color: #000;
+      transform: scale(1.1);
+    }
+
+    @media (max-width: 600px) {
+      .filters {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      header h1 {
+        font-size: 2em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>商品列表</h1>
+    <a href="index.html" class="back-link">← 返回首页</a>
+  </header>
+
+  <section class="filters">
+    <input id="searchInput" type="text" placeholder="搜索商品..." />
+    <select id="categorySelect">
+      <option value="">全部分类</option>
+      <option value="手机">手机</option>
+      <option value="笔记本">笔记本</option>
+      <option value="平板">平板</option>
+    </select>
+  </section>
+
+  <main class="product-grid" id="productGrid">
+    <div class="product-card" data-name="ເກີບຊູບເບົາ" data-category="ເກີບ">
+      <a href="productdetails/product1.html">
+        <img src="product-images/product1/6.jpg" alt="ເກີບ">
+        <h3>ເກີບຊຸບເບົາ</h3>
+        <p>ລາຄາ：89,000 ກີບ</p>
+        <p>ເກີບເບົາ, ອ່ອນ, ນຸ່ມນວນ, ໃສ່ສະບາຍ。</p>
+      </a>
+      <a class="whatsapp-btn" href="https://wa.me/8562099194058" target="_blank">📞 ສອບຖາມເພີ່ມ</a>
+    </div>
+
+    <div class="product-card" data-name="办公笔记本" data-category="笔记本">
+      <a href="productdetails/product2.html">
+        <img src="product-images/laptop.jpg" alt="笔记本">
+        <h3>办公笔记本</h3>
+        <p>价格：￥4599</p>
+        <p>轻薄便携，适合办公和学习。</p>
+      </a>
+      <a class="whatsapp-btn" href="https://wa.me/8562099194058" target="_blank">📞 联系我们</a>
+    </div>
+
+    <div class="product-card" data-name="安卓平板" data-category="平板">
+      <a href="productdetails/product3.html">
+        <img src="product-images/tablet.jpg" alt="平板">
+        <h3>安卓平板</h3>
+        <p>价格：￥1499</p>
+        <p>高清大屏，娱乐与学习两不误。</p>
+      </a>
+      <a class="whatsapp-btn" href="https://wa.me/8562099194058" target="_blank">📞 联系我们</a>
+    </div>
+  </main>
+
+  <div class="pagination">
+    <a href="#">1</a>
+    <a href="#">2</a>
+    <a href="#">3</a>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const categorySelect = document.getElementById('categorySelect');
+    const productCards = document.querySelectorAll('.product-card');
+
+    function filterProducts() {
+      const keyword = searchInput.value.toLowerCase();
+      const category = categorySelect.value;
+
+      productCards.forEach(card => {
+        const name = card.dataset.name.toLowerCase();
+        const cat = card.dataset.category;
+
+        const matchName = name.includes(keyword);
+        const matchCategory = category === "" || category === cat;
+
+        card.style.display = matchName && matchCategory ? "block" : "none";
+      });
+    }
+
+    searchInput.addEventListener('input', filterProducts);
+    categorySelect.addEventListener('change', filterProducts);
+  </script>
+</body>
+</html>

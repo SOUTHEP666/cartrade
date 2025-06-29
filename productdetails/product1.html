@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>ລາຍລະອຽດເກີບ - ລາວເຊົ້າຄ້າ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0f0f1a;
+      color: #ffffff;
+      padding-bottom: 60px;
+    }
+
+    header {
+      background: linear-gradient(to right, #00ffae, #00bfff);
+      color: #000;
+      padding: 40px 20px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 255, 200, 0.4);
+    }
+
+    header h1 {
+      font-size: 2.3em;
+      margin-bottom: 10px;
+      text-shadow: 0 0 6px rgba(0, 255, 255, 0.3);
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 1em;
+      color: #000;
+      text-decoration: none;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 6px 14px;
+      border-radius: 20px;
+      transition: background 0.3s;
+    }
+
+    .back-link:hover {
+      background-color: #e0f7f5;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .gallery {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .gallery img {
+      width: 240px;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 255, 255, 0.2);
+      transition: transform 0.4s ease;
+      cursor: pointer;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+    }
+
+    h2 {
+      font-size: 1.8em;
+      margin-bottom: 10px;
+      color: #00ffe0;
+    }
+
+    p {
+      font-size: 1.1em;
+      margin-bottom: 12px;
+      color: #cfd8dc;
+      line-height: 1.6;
+    }
+
+    .whatsapp-btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 20px;
+      background: linear-gradient(to right, #00ffae, #00bfff);
+      color: #000;
+      font-weight: bold;
+      font-size: 1em;
+      border-radius: 30px;
+      text-decoration: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .whatsapp-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(0, 255, 200, 0.6);
+    }
+
+    /* Modal 全屏图片查看器 */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .modal img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 10px;
+    }
+
+    .modal button {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 2.5em;
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: 0.2s;
+    }
+
+    .modal .prev {
+      left: 20px;
+    }
+
+    .modal .next {
+      right: 20px;
+    }
+
+    .modal .close {
+      top: 20px;
+      right: 20px;
+      font-size: 2em;
+      position: absolute;
+      transform: none;
+    }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.7em; }
+      .gallery img { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ລາຍລະອຽດເກີບ</h1>
+    <a href="../products.html" class="back-link">← ຍ້ອນກັບລາຍການສິນຄ້າ</a>
+  </header>
+
+  <main>
+    <div class="gallery" id="gallery">
+      <img src="../product-images/product1/1.jpg" alt="图1">
+      <img src="../product-images/product1/2.jpg" alt="图2">
+      <img src="../product-images/product1/3.jpg" alt="图3">
+      <img src="../product-images/product1/4.jpg" alt="图4">
+      <img src="../product-images/product1/5.jpg" alt="图5">
+      <img src="../product-images/product1/6.jpg" alt="图6">
+    </div>
+
+    <h2>ເກີບຊຸບເບົາ</h2>
+    <p>ລາຄາ：89,000 ກີບ</p>
+    <p>ສີ：ຂາວ, ດຳ, ຊົມພູ</p>
+    <p>ຂະໜາດ：36-37, 38-39, 40-41</p>
+
+    <a class="whatsapp-btn" 
+   href="https://wa.me/8562099194058?text=你好，我想了解这款产品，链接如下：https://laotrade.com/products/product1.html" 
+   target="_blank">
+   📞 ຕິດຕໍ່ສັ່ງຊື້
+</a>
+
+  </main>
+
+  <!-- Modal Viewer -->
+  <div class="modal" id="modal">
+    <button class="close" onclick="closeModal()">×</button>
+    <button class="prev" onclick="prevImage()">‹</button>
+    <img id="modalImg" src="">
+    <button class="next" onclick="nextImage()">›</button>
+  </div>
+
+  <script>
+    const galleryImages = Array.from(document.querySelectorAll('#gallery img'));
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modalImg');
+    let currentIndex = 0;
+
+    galleryImages.forEach((img, index) => {
+      img.addEventListener('click', () => {
+        currentIndex = index;
+        openModal();
+      });
+    });
+
+    function openModal() {
+      modal.style.display = 'flex';
+      modalImg.src = galleryImages[currentIndex].src;
+    }
+
+    function closeModal() {
+      modal.style.display = 'none';
+    }
+
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % galleryImages.length;
+      modalImg.src = galleryImages[currentIndex].src;
+    }
+
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+      modalImg.src = galleryImages[currentIndex].src;
+    }
+
+    // ESC 退出
+    document.addEventListener('keydown', (e) => {
+      if (e.key === "Escape") closeModal();
+      if (e.key === "ArrowRight") nextImage();
+      if (e.key === "ArrowLeft") prevImage();
+    });
+  </script>
+</body>
+</html>
