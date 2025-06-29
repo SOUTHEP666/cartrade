@@ -21,8 +21,19 @@
     <p>精选认证车辆，价格透明，支持到店看车。</p>
   </section>
 
-  <main class="car-list" id="carList">
-    <!-- JavaScript 渲染车辆列表 -->
+  <main>
+    <div class="filter-bar">
+      <input type="text" id="searchInput" placeholder="搜索车型或品牌..." />
+      <select id="sortSelect">
+        <option value="">按价格排序</option>
+        <option value="asc">价格从低到高</option>
+        <option value="desc">价格从高到低</option>
+      </select>
+    </div>
+
+    <div class="car-list" id="carList">
+      <!-- JavaScript 渲染车辆列表 -->
+    </div>
   </main>
 
   <footer>
