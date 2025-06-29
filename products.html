@@ -2,245 +2,322 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8" />
-  <title>商品 - 老挝交易通</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title data-i18n="title">老挝交易通 - 商品列表</title>
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
     }
-
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #0f0f1a;
-      color: #ffffff;
-      padding-bottom: 80px;
+      background: #0f0f1a;
+      color: #fff;
+      animation: fadeInBody 1.2s ease both;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
-
+    @keyframes fadeInBody {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
     header {
       background: linear-gradient(to right, #00ffae, #00bfff);
       color: #000;
       padding: 40px 20px;
       text-align: center;
-      box-shadow: 0 4px 20px rgba(0, 255, 200, 0.4);
+      animation: slideDown 1s ease-out both;
+      box-shadow: 0 4px 20px rgba(0, 255, 200, 0.6);
     }
-
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
     header h1 {
-      font-size: 2.5em;
-      margin-bottom: 10px;
-      text-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+      font-size: 2.4em;
+      font-weight: bold;
+      text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
     }
-
-    .back-link {
-      display: inline-block;
+    .lang-buttons {
       margin-top: 10px;
-      font-size: 1em;
+    }
+    .lang-buttons button {
+      background: #fff;
       color: #000;
-      text-decoration: none;
-      background-color: rgba(255, 255, 255, 0.7);
-      padding: 6px 14px;
-      border-radius: 20px;
-      transition: background 0.3s;
-    }
-
-    .back-link:hover {
-      background-color: #e0f7f5;
-    }
-
-    .filters {
-      max-width: 1200px;
-      margin: 30px auto 10px;
-      padding: 0 20px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .filters input,
-    .filters select {
-      padding: 8px 14px;
-      border-radius: 10px;
       border: none;
-      font-size: 1em;
-      outline: none;
-      background-color: #1c1c2c;
-      color: #00ffe0;
+      padding: 6px 14px;
+      border-radius: 18px;
+      margin: 0 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
     }
-
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 30px;
-      padding: 20px;
+    .lang-buttons button:hover {
+      background: #00ffae;
+      color: #000;
+    }
+    main {
+      flex: 1;
+      padding: 40px 20px;
       max-width: 1200px;
       margin: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 30px;
     }
-
     .product-card {
-      background: #1a1a2c;
-      border-radius: 18px;
+      background: #1c1c2c;
+      border-radius: 20px;
       overflow: hidden;
-      padding: 20px;
-      box-shadow: 0 0 12px rgba(0, 255, 255, 0.1);
+      text-align: center;
+      color: #fff;
+      box-shadow: 0 0 12px rgba(0, 255, 255, 0.2);
       transition: transform 0.4s ease, box-shadow 0.4s ease;
-      border: 1px solid rgba(0,255,255,0.2);
+      border: 1px solid rgba(0,255,255,0.3);
+      position: relative;
+      cursor: pointer;
     }
-
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: -2px; left: -2px; right: -2px; bottom: -2px;
+      background: linear-gradient(45deg, #00ffe0, #00bfff, #00ffe0);
+      z-index: -1;
+      filter: blur(10px);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      border-radius: 20px;
+    }
+    .product-card:hover::before {
+      opacity: 1;
+    }
     .product-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 10px 25px rgba(0, 255, 255, 0.3);
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 10px 30px rgba(0, 255, 255, 0.5);
     }
-
     .product-card img {
       width: 100%;
-      height: 180px;
+      height: 160px;
       object-fit: cover;
-      border-radius: 10px;
-      margin-bottom: 15px;
+      filter: brightness(1.1) contrast(1.1);
+      transition: transform 0.4s ease;
     }
-
+    .product-card:hover img {
+      transform: scale(1.05);
+    }
     .product-card h3 {
+      margin: 15px 10px 8px;
+      font-size: 1.2em;
+      font-weight: bold;
       color: #00ffe0;
-      font-size: 1.3em;
-      margin-bottom: 8px;
+      transition: color 0.3s ease;
     }
-
+    .product-card:hover h3 {
+      color: #00ffbb;
+    }
     .product-card p {
-      margin: 4px 0;
-      color: #cfd8dc;
+      margin: 0 15px 20px;
+      font-size: 0.9em;
+      color: #aaa;
+      min-height: 40px;
     }
-
-    .whatsapp-btn {
+    .back-home {
       display: inline-block;
-      margin-top: 15px;
-      padding: 10px 16px;
+      margin: 30px auto 40px;
+      padding: 12px 30px;
       background: linear-gradient(to right, #00ffae, #00bfff);
       color: #000;
-      text-decoration: none;
       font-weight: bold;
-      border-radius: 25px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .whatsapp-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 5px 15px rgba(0, 255, 200, 0.6);
-    }
-
-    .pagination {
-      text-align: center;
-      margin-top: 30px;
-    }
-
-    .pagination a {
-      display: inline-block;
-      margin: 0 8px;
-      padding: 8px 14px;
-      background: #1c1c2c;
-      color: #00ffe0;
+      border-radius: 30px;
       text-decoration: none;
-      border-radius: 8px;
-      border: 1px solid #00ffe0;
-      transition: background 0.3s, transform 0.3s;
+      box-shadow: 0 4px 12px rgba(0, 255, 200, 0.6);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      align-self: center;
     }
-
-    .pagination a:hover {
-      background: #00ffe0;
-      color: #000;
-      transform: scale(1.1);
+    .back-home:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 18px rgba(0, 255, 200, 0.8);
     }
-
-    @media (max-width: 600px) {
-      .filters {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
+    @media (max-width: 500px) {
       header h1 {
-        font-size: 2em;
+        font-size: 1.8em;
       }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>商品列表</h1>
-    <a href="index.html" class="back-link">← 返回首页</a>
-  </header>
 
-  <section class="filters">
-    <input id="searchInput" type="text" placeholder="搜索商品..." />
-    <select id="categorySelect">
-      <option value="">全部分类</option>
-      <option value="手机">手机</option>
-      <option value="笔记本">笔记本</option>
-      <option value="平板">平板</option>
-    </select>
-  </section>
-
-  <main class="product-grid" id="productGrid">
-    <div class="product-card" data-name="ເກີບຊູບເບົາ" data-category="ເກີບ">
-      <a href="productdetails/product1.html">
-        <img src="product-images/product1/6.jpg" alt="ເກີບ">
-        <h3>ເກີບຊຸບເບົາ</h3>
-        <p>ລາຄາ：89,000 ກີບ</p>
-        <p>ເກີບເບົາ, ອ່ອນ, ນຸ່ມນວນ, ໃສ່ສະບາຍ。</p>
-      </a>
-      <a class="whatsapp-btn" href="https://wa.me/8562099194058" target="_blank">📞 ສອບຖາມເພີ່ມ</a>
-    </div>
-
-    <div class="product-card" data-name="办公笔记本" data-category="笔记本">
-      <a href="productdetails/product2.html">
-        <img src="product-images/laptop.jpg" alt="笔记本">
-        <h3>办公笔记本</h3>
-        <p>价格：￥4599</p>
-        <p>轻薄便携，适合办公和学习。</p>
-      </a>
-      <a class="whatsapp-btn" href="https://wa.me/8562099194058" target="_blank">📞 联系我们</a>
-    </div>
-
-    <div class="product-card" data-name="安卓平板" data-category="平板">
-      <a href="productdetails/product3.html">
-        <img src="product-images/tablet.jpg" alt="平板">
-        <h3>安卓平板</h3>
-        <p>价格：￥1499</p>
-        <p>高清大屏，娱乐与学习两不误。</p>
-      </a>
-      <a class="whatsapp-btn" href="https://wa.me/8562099194058" target="_blank">📞 联系我们</a>
-    </div>
-  </main>
-
-  <div class="pagination">
-    <a href="#">1</a>
-    <a href="#">2</a>
-    <a href="#">3</a>
+<header>
+  <h1 data-i18n="products">商品列表</h1>
+  <div class="lang-buttons">
+    <button onclick="setLanguage('zh')">中文</button>
+    <button onclick="setLanguage('lo')">ພາສາລາວ</button>
   </div>
+</header>
 
-  <script>
-    const searchInput = document.getElementById('searchInput');
-    const categorySelect = document.getElementById('categorySelect');
-    const productCards = document.querySelectorAll('.product-card');
+<input type="text" id="searchInput" data-i18n-placeholder="search_placeholder" placeholder="搜索商品..." style="margin:20px auto;display:block;width:300px;padding:10px;border-radius:10px;border:none;font-size:1em">
 
-    function filterProducts() {
-      const keyword = searchInput.value.toLowerCase();
-      const category = categorySelect.value;
+<div style="text-align:center;margin-bottom:20px;">
+  <label id="priceLabel" data-i18n="price_range" style="margin-right:10px;">价格区间：</label>
+  <input type="number" id="minPrice" data-i18n-placeholder="min_price" placeholder="最低价" style="width:80px;padding:5px;margin-right:10px;" />
+  <input type="number" id="maxPrice" data-i18n-placeholder="max_price" placeholder="最高价" style="width:80px;padding:5px;" />
+</div>
 
-      productCards.forEach(card => {
-        const name = card.dataset.name.toLowerCase();
-        const cat = card.dataset.category;
+<main id="productContainer"></main>
 
-        const matchName = name.includes(keyword);
-        const matchCategory = category === "" || category === cat;
+<div style="text-align:center; margin: 20px;">
+  <button id="prevPage" onclick="changePage(-1)" data-i18n="prev_page">上一页</button>
+  <span id="pageInfo"></span>
+  <button id="nextPage" onclick="changePage(1)" data-i18n="next_page">下一页</button>
+</div>
 
-        card.style.display = matchName && matchCategory ? "block" : "none";
-      });
-    }
+<a href="index.html" class="back-home" data-i18n="back_home">返回首页</a>
 
-    searchInput.addEventListener('input', filterProducts);
-    categorySelect.addEventListener('change', filterProducts);
-  </script>
+<script>
+const translations = {
+  zh: {
+    title: "老挝交易通 - 商品列表",
+    products: "商品列表",
+    back_home: "返回首页",
+    search_placeholder: "搜索商品...",
+    price_range: "价格区间：",
+    min_price: "最低价",
+    max_price: "最高价",
+    prev_page: "上一页",
+    next_page: "下一页",
+    page_info: (current, total) => `第 ${current} 页 / 共 ${total} 页`,
+    currency: "KIP",
+    product1_title: "拖鞋",
+    product1_desc: "超软拖鞋，无异味。",
+    product2_title: "鞋子",
+    product2_desc: "超薄，超轻，无异味。",
+    product3_title: "鞋子",
+    product3_desc: "好穿，无异味。",
+    product4_title: "智能手表",
+    product4_desc: "运动健康监测，时尚设计。"
+  },
+  lo: {
+    title: "ລາຍການສິນຄ້າ",
+    products: "ລາຍການສິນຄ້າ",
+    back_home: "ກັບໄປໜ້າຫຼັກ",
+    search_placeholder: "ຄົ້ນຫາສິນຄ້າ...",
+    price_range: "ຊ່ວງລາຄາ:",
+    min_price: "ລາຄາຕ່ໍາສຸດ",
+    max_price: "ລາຄາສູງສຸດ",
+    prev_page: "ຫນ້າກ່ອນ",
+    next_page: "ຫນ້າຕໍ່ໄປ",
+    page_info: (current, total) => `ຫນ້າ ${current} / ${total}`,
+    currency: "₭",
+    product1_title: "ໂທລະສັບອັດສະຫຼຸມ",
+    product1_desc: "ໂທລະສັບໃໝ່ປະສິດທິພາບສູງ ແລະ ຖ່າຍຮູບຊັດເຈນ",
+    product2_title: "ຫູຟັງບລູທູດ",
+    product2_desc: "ສຽງດີ ບໍ່ມີສາຍ ແລະ ຊິດໄດ້ຍາວນານ",
+    product3_title: "ໂນດບຸກ",
+    product3_desc: "ເບົາ ແລະ ສະດວກ ສົມບູນແບບສໍາລັບວຽກງານ",
+    product4_title: "ນາລິກາອັດສະຫຼຸມ",
+    product4_desc: "ຕິດຕາມສຸຂະພາບ ແລະ ແຟຊັນ"
+  }
+};
+
+const productList = [
+  { image: "product-images/product1/6.jpg", titleKey: "product1_title", descKey: "product1_desc", price: 89000 },
+  { image: "product-images/product2/1.jpg", titleKey: "product2_title", descKey: "product2_desc", price: 120000 },
+  { image: "product-images/product3/4.jpg", titleKey: "product3_title", descKey: "product3_desc", price: 75000 },
+  { image: "product-images/product1/6.jpg", titleKey: "product4_title", descKey: "product4_desc", price: 65000 }
+];
+
+let currentPage = 1;
+const itemsPerPage = 12;
+let filteredList = [...productList];
+
+function applyTranslations(lang) {
+  const dict = translations[lang] || translations.zh;
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (typeof dict[key] === 'string') el.textContent = dict[key];
+  });
+
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (dict[key]) el.placeholder = dict[key];
+  });
+
+  const totalPages = Math.ceil(filteredList.length / itemsPerPage);
+  document.getElementById('pageInfo').innerText = dict.page_info(currentPage, totalPages);
+  document.title = dict.title || document.title;
+}
+
+function setLanguage(lang) {
+  localStorage.setItem('siteLang', lang);
+  applyTranslations(lang);
+  renderProducts();
+}
+
+function renderProducts() {
+  const lang = localStorage.getItem('siteLang') || 'zh';
+  const dict = translations[lang];
+  const start = (currentPage - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const items = filteredList.slice(start, end);
+
+  const container = document.getElementById('productContainer');
+  container.innerHTML = '';
+
+  items.forEach(product => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.innerHTML = `
+      <img src="${product.image}" alt="${dict[product.titleKey]}" />
+      <h3>${dict[product.titleKey]}</h3>
+      <p>${dict[product.descKey]}</p>
+      <p style="color:#00ffae;">${product.price} ${dict.currency}</p>
+    `;
+    card.addEventListener('click', () => {
+      window.location.href = `product-detail.html?id=${productList.indexOf(product)}`;
+    });
+    container.appendChild(card);
+  });
+
+  applyTranslations(lang);
+}
+
+function changePage(delta) {
+  const totalPages = Math.ceil(filteredList.length / itemsPerPage);
+  currentPage = Math.max(1, Math.min(currentPage + delta, totalPages));
+  renderProducts();
+}
+
+function filterProducts() {
+  const keyword = document.getElementById('searchInput').value.toLowerCase();
+  const min = parseFloat(document.getElementById('minPrice').value) || 0;
+  const max = parseFloat(document.getElementById('maxPrice').value) || Infinity;
+  const lang = localStorage.getItem('siteLang') || 'zh';
+  const dict = translations[lang];
+
+  filteredList = productList.filter(p => {
+    const title = dict[p.titleKey].toLowerCase();
+    const desc = dict[p.descKey].toLowerCase();
+    return (title.includes(keyword) || desc.includes(keyword)) && p.price >= min && p.price <= max;
+  });
+
+  currentPage = 1;
+  renderProducts();
+}
+
+window.setLanguage = setLanguage;
+
+document.addEventListener('DOMContentLoaded', () => {
+  const lang = localStorage.getItem('siteLang') || 'zh';
+  applyTranslations(lang);
+  renderProducts();
+
+  document.getElementById('searchInput').addEventListener('input', filterProducts);
+  document.getElementById('minPrice').addEventListener('input', filterProducts);
+  document.getElementById('maxPrice').addEventListener('input', filterProducts);
+});
+</script>
+
 </body>
 </html>

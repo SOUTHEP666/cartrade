@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>老挝交易通 - 首页</title>
+  <title data-i18n="title">老挝交易通 - 首页</title>
   <style>
     * {
       box-sizing: border-box;
@@ -136,31 +136,293 @@
         font-size: 1em;
       }
     }
+
+    /* WhatsApp 悬浮按钮 */
+    .whatsapp-float {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: linear-gradient(to right, #00ffae, #00bfff);
+      color: #000;
+      font-weight: bold;
+      padding: 12px 20px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(0, 255, 200, 0.6);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      z-index: 999;
+    }
+
+    .whatsapp-float:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 18px rgba(0, 255, 200, 0.8);
+    }
+
+    /* 多功能悬浮按钮组（左下） */
+    .multi-float-group {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 999;
+}
+
+.float-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(to right, #00ffae, #00bfff);
+  color: #000;
+  font-weight: bold;
+  padding: 10px 16px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0, 255, 200, 0.6);
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  min-width: 100px;
+  text-align: center;
+}
+
+.float-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(0, 255, 200, 0.8);
+}
+
+
+    /* 微信二维码弹窗 */
+    .wechat-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .wechat-box {
+      background: #fff;
+      color: #000;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 300px;
+    }
+
+    .wechat-box img {
+      width: 200px;
+      margin: 10px 0;
+    }
+
+    .wechat-box button {
+      background: #00bfa5;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  .whatsapp-float {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: linear-gradient(to right, #00ffae, #00bfff);
+      color: #000;
+      font-weight: bold;
+      padding: 12px 20px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(0, 255, 200, 0.6);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      z-index: 999;
+    }
+
+    .whatsapp-float:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 18px rgba(0, 255, 200, 0.8);
+    }
+
+    .multi-float-group {
+      position: fixed;
+      left: 20px;
+      bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 999;
+    }
+
+    .float-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: linear-gradient(to right, #00ffae, #00bfff);
+      color: #000;
+      font-weight: bold;
+      padding: 10px 16px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(0, 255, 200, 0.6);
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      min-width: 100px;
+      text-align: center;
+    }
+
+    .float-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 18px rgba(0, 255, 200, 0.8);
+    }
+
+    .wechat-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .wechat-box {
+      background: #fff;
+      color: #000;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 300px;
+    }
+
+    .wechat-box img {
+      width: 200px;
+      margin: 10px 0;
+    }
+
+    .wechat-box button {
+      background: #00bfa5;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
+
   <header>
-    <h1>老挝交易通</h1>
-    <p>一个集商品、二手车、房产、土地买卖于一体的综合交易平台。</p>
+    <h1 data-i18n="header_title">ສູນການຄ້າອອນລາຍ</h1>
+    <p data-i18n="header_desc">ພື້ນທີ່ການຊື້ຂາຍຄົບວົງຈອນ: ສິນຄ້າ, ລົດມືສອງ, ດິນ, ເຮືອນ ແລະ ອື່ນໆ...</p>
   </header>
 
   <main class="card-container">
     <a href="products.html" class="card">
       <img src="images/product.jpg" alt="商品">
-      <h3>商品</h3>
+      <h3 data-i18n="products">ສິນຄ້າ</h3>
     </a>
     <a href="cars.html" class="card">
       <img src="images/car.jpg" alt="二手车">
-      <h3>二手车</h3>
+      <h3 data-i18n="cars">ລົດມືສອງ</h3>
     </a>
     <a href="houses.html" class="card">
       <img src="images/house.jpg" alt="房产">
-      <h3>房产</h3>
+      <h3 data-i18n="houses">ອາຄານ,ເຮືອນ</h3>
     </a>
     <a href="land.html" class="card">
       <img src="images/land.jpg" alt="土地买卖">
-      <h3>土地买卖</h3>
+      <h3 data-i18n="land">ທີ່ດິນ</h3>
     </a>
   </main>
+
+  <!-- ✅ WhatsApp 联系按钮 -->
+  <a id="whatsappBtn" class="whatsapp-float" target="_blank" title="联系客服">
+    💬 <span data-i18n="contact">联系客服</span>
+  </a>
+
+  <div class="multi-float-group">
+    <button class="float-btn" onclick="setLanguage('zh')" title="切换为中文">🌐 中文</button>
+    <button class="float-btn" onclick="setLanguage('lo')" title="ປ່ຽນເປັນພາສາລາວ">🌐 ພາສາລາວ</button>
+    <a href="tel:+8562099194058" class="float-btn" title="拨打电话">📞 电话</a>
+    <button class="float-btn" onclick="document.getElementById('wechatModal').style.display='flex'" title="微信客服">💬 微信</button>
+  </div>
+
+  <div id="wechatModal" class="wechat-modal" onclick="this.style.display='none'">
+    <div class="wechat-box" onclick="event.stopPropagation();">
+      <h3 data-i18n="wechat_title">微信客服</h3>
+      <img src="images/wechat_qr.jpg" alt="微信二维码">
+      <p data-i18n="wechat_tip">长按识别添加客服</p>
+      <button onclick="document.getElementById('wechatModal').style.display='none'">关闭</button>
+    </div>
+  </div>
+
+  <script>
+    const translations = {
+      zh: {
+        header_title: "老挝交易通",
+        header_desc: "一个集商品、二手车、房产、土地买卖于一体的综合平台",
+        products: "商品",
+        cars: "二手车",
+        houses: "房产",
+        land: "土地买卖",
+        contact: "联系客服",
+        wechat_title: "微信客服",
+        wechat_tip: "长按识别添加客服",
+        whatsapp_message: "你好，我想投放产品。"
+      },
+      lo: {
+        header_title: "ສູນການຄ້າອອນລາຍ",
+        header_desc: "ຊ່ອງທາງການຄ້າຄົບວົງຈອນ ສິນຄ້າ, ລົດ, ເຮືອນ ແລະ ທີ່ດິນ",
+        products: "ສິນຄ້າ",
+        cars: "ລົດມືສອງ",
+        houses: "ອາຄານ,ເຮືອນ",
+        land: "ທີ່ດິນ",
+        contact: "ຕິດຕໍ່ພະນັກງານ",
+        wechat_title: "ສະແກນຄິວອາເຄົ້າ",
+        wechat_tip: "ກົດຄ້າໃຫ້ຍາວເພື່ອສະແກນ",
+        whatsapp_message: "ສະບາຍດີ ຂ້ອຍຢາກເຂົ້າຮ່ວມລົງສິນຄ້າໃນເວັບໄຊນີ້."
+      }
+    };
+
+    function applyTranslations(lang) {
+      const dict = translations[lang];
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (dict[key]) el.textContent = dict[key];
+      });
+    }
+
+    function updateWhatsAppLink(lang) {
+      const msg = translations[lang]?.whatsapp_message || translations.zh.whatsapp_message;
+      const encodedMsg = encodeURIComponent(msg);
+      document.getElementById("whatsappBtn").href = `https://wa.me/8562099194058?text=${encodedMsg}`;
+    }
+
+    function setLanguage(lang) {
+      localStorage.setItem("siteLang", lang);
+      applyTranslations(lang);
+      updateWhatsAppLink(lang);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const lang = localStorage.getItem("siteLang") || "zh";
+      applyTranslations(lang);
+      updateWhatsAppLink(lang);
+    });
+  </script>
 </body>
 </html>

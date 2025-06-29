@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>商品详情 - 老挝交易通</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(145deg, #0f0f1a, #1a1a2e);
+      color: #fff;
+      padding-bottom: 60px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      position: relative;
+    }
+    #particles-js {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    header {
+      background: linear-gradient(to right, #00ffe1, #0099ff);
+      color: #000;
+      padding: 50px 20px;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(0, 255, 200, 0.4);
+      border-bottom: 2px solid #00fff2;
+    }
+    header h1 {
+      font-size: 2.8em;
+      margin-bottom: 15px;
+      text-shadow: 0 0 12px rgba(0, 255, 255, 0.7);
+      letter-spacing: 2px;
+      font-weight: 700;
+    }
+    .back-link {
+      font-size: 1em;
+      background: linear-gradient(to right, #ffffff, #d6fffa);
+      color: #000;
+      padding: 8px 18px;
+      border-radius: 30px;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    .back-link:hover {
+      background-color: #c3f2ff;
+      transform: translateY(-2px);
+    }
+    main {
+      max-width: 1000px;
+      margin: 60px auto;
+      padding: 0 24px;
+      flex: 1;
+      background-color: rgba(255, 255, 255, 0.03);
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,255,255,0.1);
+      backdrop-filter: blur(6px);
+    }
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin: 20px 0 30px;
+    }
+    .gallery img {
+      width: 130px;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 0 16px rgba(0, 255, 255, 0.3);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .gallery img:hover {
+      transform: scale(1.15);
+      box-shadow: 0 0 24px rgba(0,255,255,0.7);
+    }
+    h2 {
+      font-size: 2em;
+      margin-bottom: 12px;
+      color: #00ffe0;
+      text-align: center;
+      text-shadow: 0 0 8px rgba(0, 255, 200, 0.6);
+    }
+    p {
+      font-size: 1.1em;
+      margin-bottom: 10px;
+      color: #cfd8dc;
+      line-height: 1.6;
+    }
+    .info-line {
+      display: flex;
+      align-items: center;
+      font-size: 1.1em;
+      color: #cfd8dc;
+      margin-bottom: 10px;
+      animation: fadeInUp 0.6s ease both;
+      gap: 8px;
+      padding: 6px 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+    .info-line strong {
+      min-width: 120px;
+      color: #ffffff;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(10px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .contact-btn {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 14px 30px;
+      font-size: 1.2em;
+      background: linear-gradient(to right, #00ffae, #00bfff);
+      color: #000;
+      font-weight: bold;
+      border-radius: 40px;
+      text-decoration: none;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      box-shadow: 0 8px 20px rgba(0, 255, 200, 0.4);
+    }
+    .contact-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 30px rgba(0, 255, 200, 0.6);
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .modal img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 10px;
+    }
+    .modal button {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 2.5em;
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .modal .prev { left: 20px; }
+    .modal .next { right: 20px; }
+    .modal .close {
+      top: 20px;
+      right: 20px;
+      font-size: 2em;
+      position: absolute;
+      transform: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="particles-js"></div>
+  <header>
+    <h1 id="pageTitle">商品详情</h1>
+    <a href="products.html" class="back-link" id="backLink">← 返回商品列表</a>
+  </header>
+
+  <main>
+    <div class="gallery" id="gallery"></div>
+    <h2 id="productTitle">产品标题</h2>
+    <p id="productDesc">产品描述</p>
+    <div class="info-line"><strong id="labelPrice">价格：</strong><span id="productPrice"></span> KIP</div>
+    <div class="info-line"><strong id="labelCode">商品编号：</strong><span id="productCode"></span></div>
+    <div class="info-line"><strong id="labelColor">颜色：</strong><span id="productColor"></span></div>
+    <div class="info-line"><strong id="labelSize">尺寸：</strong><span id="productSize"></span></div>
+    <div class="info-line"><strong id="labelStock">库存数量：</strong><span id="productStock"></span></div>
+    <a href="#" target="_blank" class="contact-btn" id="contactBtn">📞 联系卖家</a>
+  </main>
+
+  <div class="modal" id="modal">
+    <button class="close" id="closeModalBtn">×</button>
+    <button class="prev" id="prevBtn">‹</button>
+    <img id="modalImage" src="" alt="大图" />
+    <button class="next" id="nextBtn">›</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.1/tsparticles.bundle.min.js"></script>
+  <script>
+    tsParticles.load("particles-js", {
+      fullScreen: { enable: false },
+      particles: {
+        number: { value: 60 },
+        color: { value: "#00fff7" },
+        size: { value: 2 },
+        move: { enable: true, speed: 0.6 },
+        opacity: { value: 0.5 },
+        links: { enable: true, color: "#00faff", opacity: 0.3 }
+      },
+      background: { color: "#0f0f1a" }
+    });
+
+    const productList = [
+      {
+        images: [
+          "product-images/product1/1.jpg", "product-images/product1/2.jpg",
+          "product-images/product1/3.jpg", "product-images/product1/4.jpg",
+          "product-images/product1/5.jpg", "product-images/product1/6.jpg"
+        ],
+        titles: { zh: "智能手机", lo: "ໂທລະສັບອັດສະຫຼຸມ" },
+        descriptions: { zh: "最新款智能手机，性能卓越，拍照清晰。", lo: "ໂທລະສັບໃໝ່ປະສິດທິພາບສູງ ແລະ ຖ່າຍຮູບຊັດເຈນ" },
+        price: 1500,
+        code: "A001",
+        color: { zh: "黑色, 白色, 蓝色", lo: "ດໍາ, ຂາວ, ຟ້າ" },
+        size: "36-41",
+        stock: 100,
+        sellerPhone: "8562099194058"
+      }
+    ];
+
+    const translations = {
+      zh: {
+        pageTitle: "商品详情", backLink: "← 返回商品列表",
+        contactMsg: "你好，我想购买此商品。链接：",
+        contactBtnText: "📞 联系卖家",
+        labelPrice: "价格：", labelCode: "商品编号：",
+        labelColor: "颜色：", labelSize: "尺寸：", labelStock: "库存数量："
+      },
+      lo: {
+        pageTitle: "ລາຍລະອຽດສິນຄ້າ", backLink: "← ກັບໄປລາຍການສິນຄ້າ",
+        contactMsg: "ສະບາຍດີ, ຂ້ອຍສົນໃຈສິນຄ້ານີ້. ລິ້ງ:",
+        contactBtnText: "📞 ຕິດຕໍ່ຝ່າຍຂາຍ",
+        labelPrice: "ລາຄາ:", labelCode: "ລະຫັດສິນຄ້າ:",
+        labelColor: "ສີ:", labelSize: "ຂະໜາດ:", labelStock: "ຈຳນວນໃນສາງ:"
+      }
+    };
+
+    function getQueryParam(name) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(name);
+    }
+
+    function updateContactLink(phone, contactMsg, lang) {
+      const url = encodeURIComponent(window.location.href);
+      const msg = encodeURIComponent(`${contactMsg} ${decodeURIComponent(url)}`);
+      const waUrl = `https://wa.me/${phone}?text=${msg}`;
+      const btn = document.getElementById('contactBtn');
+      btn.href = waUrl;
+      btn.textContent = translations[lang]?.contactBtnText || translations.zh.contactBtnText;
+    }
+
+    function renderProduct() {
+      const lang = localStorage.getItem('siteLang') || 'zh';
+      const dict = translations[lang] || translations.zh;
+      let id = parseInt(getQueryParam('id')) || 0;
+      if (id < 0 || id >= productList.length) id = 0;
+
+      const product = productList[id];
+      document.getElementById('pageTitle').textContent = dict.pageTitle;
+      document.getElementById('backLink').textContent = dict.backLink;
+      document.getElementById('productTitle').textContent = product.titles[lang] || product.titles.zh;
+      document.getElementById('productDesc').textContent = product.descriptions[lang] || product.descriptions.zh;
+      document.getElementById('productPrice').textContent = product.price;
+      document.getElementById('productCode').textContent = product.code;
+      document.getElementById('productColor').textContent = product.color[lang] || product.color.zh;
+      document.getElementById('productSize').textContent = product.size;
+      document.getElementById('productStock').textContent = product.stock;
+      document.getElementById('labelPrice').textContent = dict.labelPrice;
+      document.getElementById('labelCode').textContent = dict.labelCode;
+      document.getElementById('labelColor').textContent = dict.labelColor;
+      document.getElementById('labelSize').textContent = dict.labelSize;
+      document.getElementById('labelStock').textContent = dict.labelStock;
+
+      renderGallery(product.images);
+      updateContactLink(product.sellerPhone, dict.contactMsg, lang);
+    }
+
+    function renderGallery(images) {
+      const gallery = document.getElementById('gallery');
+      gallery.innerHTML = '';
+      images.forEach((src, idx) => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = `图片${idx + 1}`;
+        img.addEventListener('click', () => openModal(idx, images));
+        gallery.appendChild(img);
+      });
+    }
+
+    const modal = document.getElementById('modal');
+    const modalImage = document.getElementById('modalImage');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    let currentImages = [], currentIndex = 0;
+
+    function openModal(index, images) {
+      currentImages = images;
+      currentIndex = index;
+      modal.style.display = 'flex';
+      modalImage.src = currentImages[currentIndex];
+    }
+    function closeModal() { modal.style.display = 'none'; }
+    function showNext() {
+      currentIndex = (currentIndex + 1) % currentImages.length;
+      modalImage.src = currentImages[currentIndex];
+    }
+    function showPrev() {
+      currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+      modalImage.src = currentImages[currentIndex];
+    }
+
+    closeModalBtn.addEventListener('click', closeModal);
+    nextBtn.addEventListener('click', showNext);
+    prevBtn.addEventListener('click', showPrev);
+    document.addEventListener('keydown', e => {
+      if (modal.style.display === 'flex') {
+        if (e.key === 'Escape') closeModal();
+        else if (e.key === 'ArrowRight') showNext();
+        else if (e.key === 'ArrowLeft') showPrev();
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', renderProduct);
+  </script>
+</body>
+</html>
