@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title id="pageTitle">土地详情</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: "Microsoft YaHei", sans-serif;
+      background: #f6f8f3;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    header {
+      background: #64a95f;
+      color: white;
+      padding: 30px 0;
+      text-align: center;
+    }
+
+    .lang-switch {
+      margin-top: 10px;
+    }
+
+    .lang-switch button {
+      margin: 0 5px;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 16px;
+      background: white;
+      color: #4a7c46;
+      cursor: pointer;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 30px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .image-gallery {
+      display: flex;
+      overflow-x: auto;
+      gap: 10px;
+      padding-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .image-gallery img {
+      height: 300px;
+      border-radius: 10px;
+      object-fit: cover;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+    .image-gallery img:hover {
+      transform: scale(1.05);
+    }
+
+    h2 {
+      margin-top: 20px;
+      font-size: 24px;
+      color: #4b752e;
+    }
+
+    .desc {
+      font-size: 16px;
+      margin: 15px 0;
+    }
+
+    .price {
+      font-size: 20px;
+      font-weight: bold;
+      color: #64a95f;
+    }
+
+    .btn-group {
+      margin-top: 20px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: #88c057;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      flex-grow: 1;
+      max-width: 200px;
+      text-align: center;
+    }
+
+    /* 全屏遮罩 */
+    #fullscreenOverlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    #fullscreenOverlay img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.7);
+    }
+
+    /* 全屏切换箭头 */
+    .nav-arrow {
+      position: fixed;
+      top: 50%;
+      font-size: 48px;
+      color: white;
+      user-select: none;
+      cursor: pointer;
+      z-index: 1100;
+      transform: translateY(-50%);
+      font-weight: bold;
+      background: rgba(0,0,0,0.3);
+      border-radius: 50%;
+      padding: 10px;
+      line-height: 1;
+    }
+    #arrowLeft {
+      left: 20px;
+    }
+    #arrowRight {
+      right: 20px;
+    }
+    #fullscreenOverlay.close-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      font-size: 36px;
+      cursor: pointer;
+      color: white;
+      background: rgba(0,0,0,0.3);
+      border-radius: 50%;
+      padding: 5px 12px;
+      user-select: none;
+      z-index: 1100;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 id="detailTitle">土地详情</h1>
+  <div class="lang-switch">
+    <button onclick="setLang('zh')">中文</button>
+    <button onclick="setLang('lo')">ລາວ</button>
+  </div>
+</header>
+
+<div class="container">
+  <div class="image-gallery" id="gallery" aria-label="土地图片画廊" tabindex="0"></div>
+  <h2 id="landTitle">...</h2>
+  <p class="desc" id="landDesc">...</p>
+  <div class="price" id="landPrice">...</div>
+  <div class="btn-group">
+    <button class="btn" id="contactBtn">联系我们</button>
+    <a href="land.html" class="btn" id="backBtn">返回土地列表</a>
+  </div>
+</div>
+
+<!-- 全屏遮罩 -->
+<div id="fullscreenOverlay" aria-modal="true" role="dialog">
+  <span id="closeFullscreen" class="close-btn" title="关闭">×</span>
+  <span id="arrowLeft" class="nav-arrow" title="上一张">&#8249;</span>
+  <img id="fullscreenImg" src="" alt="土地图片全屏展示" />
+  <span id="arrowRight" class="nav-arrow" title="下一张">&#8250;</span>
+</div>
+
+<script>
+const data = [
+  {
+    id: 0,
+    title_zh: "市中心商业地", title_lo: "ທີ່ດິນໃນເມືອງ",
+    desc_zh: "适合建商铺", desc_lo: "ເໝາະຮ້ານຄ້າ",
+    price: 30000000,
+    images: [
+      "land-images/land1/1.jpg",
+      "land-images/land1/2.jpg",
+      "land-images/land1/3.jpg",
+      "land-images/land1/4.jpg",
+      "land-images/land1/5.jpg",
+      "land-images/land1/6.jpg"
+    ]
+  },
+  {
+    id: 1,
+    title_zh: "郊区农业地", title_lo: "ທີ່ດິນກະສິກໍາ",
+    desc_zh: "适合种植养殖", desc_lo: "ປູກຜັກໄດ້",
+    price: 18000000,
+    images: [
+      "land-images/land2/1.jpg",
+      "land-images/land2/2.jpg",
+      "land-images/land2/3.jpg",
+      "land-images/land2/4.jpg",
+      "land-images/land2/5.jpg",
+      "land-images/land2/6.jpg"
+    ]
+  },
+  {
+    id: 2,
+    title_zh: "湄公河边地", title_lo: "ທີ່ດິນຕາມແມ່ນ້ຳ",
+    desc_zh: "风景优美", desc_lo: "ທິວທັດງາມ",
+    price: 26000000,
+    images: [
+      "land-images/land3/1.jpg",
+      "land-images/land3/2.jpg",
+      "land-images/land3/3.jpg",
+      "land-images/land3/4.jpg",
+      "land-images/land3/5.jpg",
+      "land-images/land3/6.jpg"
+    ]
+  },
+  {
+    id: 3,
+    title_zh: "工业区仓储地", title_lo: "ທີ່ດິນໂຮງງານ",
+    desc_zh: "适合建设厂房", desc_lo: "ສ້າງໂຮງງານ",
+    price: 32000000,
+    images: [
+      "land-images/land4/1.jpg",
+      "land-images/land4/2.jpg",
+      "land-images/land4/3.jpg",
+      "land-images/land4/4.jpg",
+      "land-images/land4/5.jpg",
+      "land-images/land4/6.jpg"
+    ]
+  }
+];
+
+const translations = {
+  zh: {
+    detailTitle: "土地详情",
+    back: "返回土地列表",
+    currency: "KIP",
+    pageTitle: "土地详情",
+    contactText: "联系我们",
+    contactMsg: "您好，我对您的土地感兴趣。",
+    contactLandLabel: "土地：",
+    contactUrlLabel: "网址："
+  },
+  lo: {
+    detailTitle: "ລາຍລະອຽດທີ່ດິນ",
+    back: "ກັບໄປລາຍການທີ່ດິນ",
+    currency: "₭",
+    pageTitle: "ລາຍລະອຽດທີ່ດິນ",
+    contactText: "ຕິດຕໍ່ພວກເຮົາ",
+    contactMsg: "ສະບາຍດີ, ຂ້ອຍສົນໃຈໃນທີ່ດິນຂອງທ່ານ.",
+    contactLandLabel: "ທີ່ດິນ: ",
+    contactUrlLabel: "ເວັບໄຊ: "
+  }
+};
+
+// WhatsApp 联系电话，替换成你的号码（国际区号+号码），如：'856912345678'
+const phoneNumber = "8562099194058";
+
+let lang = localStorage.getItem('lang') || 'zh';
+
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('lang', l);
+  render();
+}
+
+function render() {
+  const dict = translations[lang];
+  const params = new URLSearchParams(location.search);
+  const id = parseInt(params.get("id"));
+  const item = data.find(i => i.id === id);
+
+  if (!item) {
+    document.getElementById("landTitle").textContent = lang === 'zh' ? "未找到土地信息" : "ບໍ່ພົບຂໍ້ມູນທີ່ດິນ";
+    return;
+  }
+
+  document.title = dict.pageTitle;
+  document.getElementById("pageTitle").textContent = dict.pageTitle;
+  document.getElementById("detailTitle").textContent = dict.detailTitle;
+  document.getElementById("landTitle").textContent = item["title_" + lang];
+  document.getElementById("landDesc").textContent = item["desc_" + lang];
+  document.getElementById("landPrice").textContent = item.price.toLocaleString() + " " + dict.currency;
+  document.getElementById("backBtn").textContent = dict.back;
+  document.getElementById("contactBtn").textContent = dict.contactText;
+
+  // 渲染图片画廊
+  const gallery = document.getElementById("gallery");
+  gallery.innerHTML = "";
+  item.images.forEach((src, i) => {
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = item["title_" + lang] + " 图片 " + (i+1);
+    img.tabIndex = 0;
+    img.addEventListener("click", () => openFullscreen(i));
+    img.addEventListener("keypress", e => {
+      if (e.key === 'Enter') openFullscreen(i);
+    });
+    gallery.appendChild(img);
+  });
+}
+
+// 全屏查看图片功能
+const fullscreenOverlay = document.getElementById("fullscreenOverlay");
+const fullscreenImg = document.getElementById("fullscreenImg");
+const closeBtn = document.getElementById("closeFullscreen");
+const arrowLeft = document.getElementById("arrowLeft");
+const arrowRight = document.getElementById("arrowRight");
+
+let currentIndex = 0;
+let currentImages = [];
+
+function openFullscreen(index) {
+  const params = new URLSearchParams(location.search);
+  const id = parseInt(params.get("id"));
+  const item = data.find(i => i.id === id);
+  if (!item) return;
+
+  currentImages = item.images;
+  currentIndex = index;
+  fullscreenImg.src = currentImages[currentIndex];
+  fullscreenOverlay.style.display = "flex";
+}
+
+function closeFullscreen() {
+  fullscreenOverlay.style.display = "none";
+}
+
+function showPrev() {
+  currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+  fullscreenImg.src = currentImages[currentIndex];
+}
+
+function showNext() {
+  currentIndex = (currentIndex + 1) % currentImages.length;
+  fullscreenImg.src = currentImages[currentIndex];
+}
+
+closeBtn.onclick = closeFullscreen;
+arrowLeft.onclick = showPrev;
+arrowRight.onclick = showNext;
+
+fullscreenOverlay.onclick = (e) => {
+  if (e.target === fullscreenOverlay) closeFullscreen();
+};
+
+document.addEventListener("keydown", (e) => {
+  if (fullscreenOverlay.style.display === "flex") {
+    if (e.key === "ArrowLeft") showPrev();
+    else if (e.key === "ArrowRight") showNext();
+    else if (e.key === "Escape") closeFullscreen();
+  }
+});
+
+// 联系我们按钮跳转 WhatsApp，带消息和网址
+document.getElementById("contactBtn").addEventListener("click", () => {
+  const dict = translations[lang];
+  const params = new URLSearchParams(location.search);
+  const id = parseInt(params.get("id"));
+  const item = data.find(i => i.id === id);
+
+  let title = item ? item["title_" + lang] : "";
+  const message = encodeURIComponent(
+    dict.contactMsg + "\n" +
+    dict.contactLandLabel + title + "\n" +
+    dict.contactUrlLabel + window.location.href
+  );
+  const url = `https://wa.me/${phoneNumber}?text=${message}`;
+  window.open(url, "_blank");
+});
+
+document.addEventListener("DOMContentLoaded", render);
+</script>
+
+</body>
+</html>

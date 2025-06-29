@@ -66,7 +66,8 @@
       color: #00ffae;
       margin: 20px 0;
     }
-    a.back {
+    a.back,
+    a.contact {
       display: inline-block;
       margin-top: 30px;
       padding: 10px 20px;
@@ -75,6 +76,16 @@
       text-decoration: none;
       border-radius: 30px;
       font-weight: bold;
+      margin-right: 15px;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+    a.back:hover,
+    a.contact:hover {
+      background: #00cc8f;
+    }
+    .action-buttons {
+      margin-top: 30px;
     }
 
     /* Fullscreen viewer */
@@ -106,6 +117,7 @@
       padding: 8px 12px;
       border-radius: 10px;
       cursor: pointer;
+      user-select: none;
     }
     .viewer .close { right: 20px; }
     .viewer .prev { left: 20px; top: 50%; transform: translateY(-50%); }
@@ -118,7 +130,7 @@
   <h1 id="title">车辆详情</h1>
   <div class="lang-buttons">
     <button onclick="setLanguage('zh')">中文</button>
-    <button onclick="setLanguage('lo')">ລາວ</button>
+    <button onclick="setLanguage('lo')">ພາສາລາວ</button>
   </div>
 </header>
 
@@ -135,7 +147,14 @@
 <script>
 const carData = [
   {
-    images: ["car-images/car1/1.jpg", "car-images/car1/2.jpg", "car-images/car1/3.jpg", "car-images/car1/4.jpg", "car-images/car1/5.jpg", "car-images/car1/6.jpg"],
+    images: [
+      "car-images/car1/1.jpg",
+      "car-images/car1/2.jpg",
+      "car-images/car1/3.jpg",
+      "car-images/car1/4.jpg",
+      "car-images/car1/5.jpg",
+      "car-images/car1/6.jpg"
+    ],
     title: { zh: "丰田卡罗拉", lo: "Toyota Corolla" },
     desc: { zh: "省油耐用，适合城市代步，2018年款", lo: "ປະຫຍັດນໍ້າມັນ ຂັບງ່າຍ 2018" },
     price: 42000000,
@@ -145,7 +164,48 @@ const carData = [
     fuel: { zh: "汽油", lo: "ນ້ຳມັນຕົກຄ່າ" }
   },
   {
-    images: ["car-images/car2/1.jpg", "car-images/car2/2.jpg", "car-images/car2/3.jpg", "car-images/car2/4.jpg", "car-images/car2/5.jpg", "car-images/car2/6.jpg"],
+    images: [
+      "car-images/car2/1.jpg",
+      "car-images/car2/2.jpg",
+      "car-images/car2/3.jpg",
+      "car-images/car2/4.jpg",
+      "car-images/car2/5.jpg",
+      "car-images/car2/6.jpg"
+    ],
+    title: { zh: "现代伊兰特", lo: "Hyundai Elantra" },
+    desc: { zh: "空间大，性能稳定，2020年款", lo: "ພື້ນທີ່ກວ້າງ ຂັບດີ 2020" },
+    price: 53000000,
+    year: 2020,
+    mileage: 30000,
+    transmission: { zh: "手动", lo: "ເກຍມື" },
+    fuel: { zh: "柴油", lo: "ນ້ຳມັນດີເຊວ" }
+  },
+    {
+    images: [
+      "car-images/car3/1.jpg",
+      "car-images/car3/2.jpg",
+      "car-images/car3/3.jpg",
+      "car-images/car3/4.jpg",
+      "car-images/car3/5.jpg",
+      "car-images/car3/6.jpg"
+    ],
+    title: { zh: "现代伊兰特", lo: "Hyundai Elantra" },
+    desc: { zh: "空间大，性能稳定，2020年款", lo: "ພື້ນທີ່ກວ້າງ ຂັບດີ 2020" },
+    price: 53000000,
+    year: 2020,
+    mileage: 30000,
+    transmission: { zh: "手动", lo: "ເກຍມື" },
+    fuel: { zh: "柴油", lo: "ນ້ຳມັນດີເຊວ" }
+  },
+    {
+    images: [
+      "car-images/car4/1.jpg",
+      "car-images/car4/2.jpg",
+      "car-images/car4/3.jpg",
+      "car-images/car4/4.jpg",
+      "car-images/car4/5.jpg",
+      "car-images/car4/6.jpg"
+    ],
     title: { zh: "现代伊兰特", lo: "Hyundai Elantra" },
     desc: { zh: "空间大，性能稳定，2020年款", lo: "ພື້ນທີ່ກວ້າງ ຂັບດີ 2020" },
     price: 53000000,
@@ -165,7 +225,9 @@ const translations = {
     label_trans: "变速箱",
     label_fuel: "燃料",
     back: "返回列表",
-    currency: "KIP"
+    contact: "联系我们",
+    currency: "KIP",
+    contact_info: "你好！我对这辆车感兴趣 网址："
   },
   lo: {
     title: "ລາຍລະອຽດລົດ",
@@ -175,7 +237,9 @@ const translations = {
     label_trans: "ເກຍ",
     label_fuel: "ພາຫະນະກຳ",
     back: "ກັບໄປ",
-    currency: "₭"
+    contact: "ຕິດຕໍ່ພວກເຮົາ",
+    currency: "₭",
+    contact_info: "ສະບາຍດີ, ຂ້ອຍສົນໃຈລົດຄັນນີ້ ເວັບໄຊທ໌: "
   }
 };
 
@@ -195,7 +259,7 @@ function renderDetails() {
 
   const car = carData[id];
   if (!car) {
-    alert("参数错误，返回首页！");
+    alert(lang === "zh" ? "参数错误，返回首页！" : "ພາລະກິດຜິດພາດ, ກັບໄປໜ້າຫຼັກ!");
     window.location.href = "cars.html";
     return;
   }
@@ -203,11 +267,13 @@ function renderDetails() {
   document.title = dict.title;
   document.getElementById("title").textContent = dict.title;
 
-  currentImages = car.images; // store for viewer
+  currentImages = car.images;
 
   const imagesHtml = car.images.map((img, index) =>
-    `<img src="${img}" onclick="openViewer(${index})">`
+    `<img src="${img}" onclick="openViewer(${index})" alt="car image ${index + 1}">`
   ).join('');
+
+  const currentUrl = window.location.href;
 
   const html = `
     <div class="image-gallery">${imagesHtml}</div>
@@ -220,7 +286,10 @@ function renderDetails() {
       <div><span class="label">${dict.label_trans}:</span> ${car.transmission[lang]}</div>
       <div><span class="label">${dict.label_fuel}:</span> ${car.fuel[lang]}</div>
     </div>
-    <a class="back" href="cars.html">${dict.back}</a>
+    <div class="action-buttons">
+      <a class="back" href="cars.html">${dict.back}</a>
+      <a class="contact" href="https://wa.me/8562099194058?text=${encodeURIComponent(dict.contact_info + currentUrl)}" target="_blank" rel="noopener noreferrer">${dict.contact}</a>
+    </div>
   `;
   document.getElementById("detailContainer").innerHTML = html;
 }
@@ -248,7 +317,10 @@ function nextImage() {
   document.getElementById("viewerImg").src = currentImages[currentIndex];
 }
 
-document.addEventListener("DOMContentLoaded", renderDetails);
+document.addEventListener("DOMContentLoaded", () => {
+  const lang = localStorage.getItem("siteLang") || "zh";
+  setLanguage(lang);
+});
 
 // Add zoom on mouse wheel
 document.getElementById("viewerImg").addEventListener("wheel", function (e) {
