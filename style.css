@@ -1,0 +1,69 @@
+body {
+  margin: 0;
+  font-family: 'Helvetica Neue', sans-serif;
+  background-color: #f7f7f7;
+  color: #333;
+}
+header {
+  background-color: #222;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+}
+header .logo {
+  font-size: 20px;
+}
+nav a {
+  color: white;
+  margin-left: 20px;
+  text-decoration: none;
+}
+.hero {
+  text-align: center;
+  background: url('images/car1.jpg') center/cover no-repeat;
+  color: white;
+  padding: 100px 20px;
+  background-blend-mode: darken;
+  background-color: rgba(0,0,0,0.5);
+}
+.hero h1 {
+  font-size: 2.5em;
+}
+.hero p {
+  font-size: 1.2em;
+}
+.car-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 40px;
+}
+.car-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+.car-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+.car-card .info {
+  padding: 15px;
+}
+.car-card h3 {
+  margin-bottom: 10px;
+}
+.car-card .price {
+  color: #e91e63;
+  font-weight: bold;
+}
+footer {
+  text-align: center;
+  padding: 20px;
+  background: #222;
+  color: white;
+}
