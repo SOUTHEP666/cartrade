@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>车辆详情</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0b0b14;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      padding: 30px 20px;
+      text-align: center;
+      background: linear-gradient(to right, #00ffae, #00bfff);
+      color: #000;
+    }
+    .lang-buttons button {
+      background: #000;
+      color: #00ffae;
+      border: none;
+      padding: 8px 16px;
+      margin: 0 5px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    main {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #181828;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0,255,255,0.3);
+    }
+    .image-gallery {
+      display: flex;
+      overflow-x: auto;
+      gap: 12px;
+    }
+    .image-gallery img {
+      height: 280px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .image-gallery img:hover {
+      transform: scale(1.05);
+    }
+    h2 {
+      margin-top: 20px;
+      color: #00ffe0;
+    }
+    .info {
+      margin-top: 10px;
+      line-height: 1.8;
+    }
+    .label {
+      color: #00ffae;
+      font-weight: bold;
+    }
+    .price {
+      font-size: 1.6em;
+      color: #00ffae;
+      margin: 20px 0;
+    }
+    a.back {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 20px;
+      background: #00ffae;
+      color: #000;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: bold;
+    }
+
+    /* Fullscreen viewer */
+    .viewer {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      flex-direction: column;
+    }
+    .viewer img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 10px;
+      transition: transform 0.3s ease;
+    }
+    .viewer .close,
+    .viewer .prev,
+    .viewer .next {
+      position: absolute;
+      top: 20px;
+      font-size: 24px;
+      background: #00ffae;
+      color: #000;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .viewer .close { right: 20px; }
+    .viewer .prev { left: 20px; top: 50%; transform: translateY(-50%); }
+    .viewer .next { right: 20px; top: 50%; transform: translateY(-50%); }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 id="title">车辆详情</h1>
+  <div class="lang-buttons">
+    <button onclick="setLanguage('zh')">中文</button>
+    <button onclick="setLanguage('lo')">ລາວ</button>
+  </div>
+</header>
+
+<main id="detailContainer"></main>
+
+<!-- Fullscreen viewer -->
+<div class="viewer" id="viewer">
+  <button class="close" onclick="closeViewer()">✕</button>
+  <button class="prev" onclick="prevImage()">◀</button>
+  <img id="viewerImg" src="" alt="preview">
+  <button class="next" onclick="nextImage()">▶</button>
+</div>
+
+<script>
+const carData = [
+  {
+    images: ["car-images/car1/1.jpg", "car-images/car1/2.jpg", "car-images/car1/3.jpg", "car-images/car1/4.jpg", "car-images/car1/5.jpg", "car-images/car1/6.jpg"],
+    title: { zh: "丰田卡罗拉", lo: "Toyota Corolla" },
+    desc: { zh: "省油耐用，适合城市代步，2018年款", lo: "ປະຫຍັດນໍ້າມັນ ຂັບງ່າຍ 2018" },
+    price: 42000000,
+    year: 2018,
+    mileage: 45000,
+    transmission: { zh: "自动", lo: "ເກຍອັດຕະໂນມັດ" },
+    fuel: { zh: "汽油", lo: "ນ້ຳມັນຕົກຄ່າ" }
+  },
+  {
+    images: ["car-images/car2/1.jpg", "car-images/car2/2.jpg", "car-images/car2/3.jpg", "car-images/car2/4.jpg", "car-images/car2/5.jpg", "car-images/car2/6.jpg"],
+    title: { zh: "现代伊兰特", lo: "Hyundai Elantra" },
+    desc: { zh: "空间大，性能稳定，2020年款", lo: "ພື້ນທີ່ກວ້າງ ຂັບດີ 2020" },
+    price: 53000000,
+    year: 2020,
+    mileage: 30000,
+    transmission: { zh: "手动", lo: "ເກຍມື" },
+    fuel: { zh: "柴油", lo: "ນ້ຳມັນດີເຊວ" }
+  }
+];
+
+const translations = {
+  zh: {
+    title: "车辆详情",
+    label_price: "价格",
+    label_year: "年份",
+    label_mileage: "里程",
+    label_trans: "变速箱",
+    label_fuel: "燃料",
+    back: "返回列表",
+    currency: "KIP"
+  },
+  lo: {
+    title: "ລາຍລະອຽດລົດ",
+    label_price: "ລາຄາ",
+    label_year: "ປີຜະລິດ",
+    label_mileage: "ໄລ່ລະຍະ",
+    label_trans: "ເກຍ",
+    label_fuel: "ພາຫະນະກຳ",
+    back: "ກັບໄປ",
+    currency: "₭"
+  }
+};
+
+let currentImages = [];
+let currentIndex = 0;
+
+function setLanguage(lang) {
+  localStorage.setItem("siteLang", lang);
+  renderDetails();
+}
+
+function renderDetails() {
+  const params = new URLSearchParams(window.location.search);
+  const id = parseInt(params.get("id"));
+  const lang = localStorage.getItem("siteLang") || "zh";
+  const dict = translations[lang];
+
+  const car = carData[id];
+  if (!car) {
+    alert("参数错误，返回首页！");
+    window.location.href = "cars.html";
+    return;
+  }
+
+  document.title = dict.title;
+  document.getElementById("title").textContent = dict.title;
+
+  currentImages = car.images; // store for viewer
+
+  const imagesHtml = car.images.map((img, index) =>
+    `<img src="${img}" onclick="openViewer(${index})">`
+  ).join('');
+
+  const html = `
+    <div class="image-gallery">${imagesHtml}</div>
+    <h2>${car.title[lang]}</h2>
+    <p>${car.desc[lang]}</p>
+    <div class="info">
+      <div><span class="label">${dict.label_price}:</span> ${car.price.toLocaleString()} ${dict.currency}</div>
+      <div><span class="label">${dict.label_year}:</span> ${car.year}</div>
+      <div><span class="label">${dict.label_mileage}:</span> ${car.mileage.toLocaleString()} km</div>
+      <div><span class="label">${dict.label_trans}:</span> ${car.transmission[lang]}</div>
+      <div><span class="label">${dict.label_fuel}:</span> ${car.fuel[lang]}</div>
+    </div>
+    <a class="back" href="cars.html">${dict.back}</a>
+  `;
+  document.getElementById("detailContainer").innerHTML = html;
+}
+
+function openViewer(index) {
+  currentIndex = index;
+  const viewer = document.getElementById("viewer");
+  const img = document.getElementById("viewerImg");
+  img.src = currentImages[currentIndex];
+  img.style.transform = 'scale(1)';
+  viewer.style.display = 'flex';
+}
+
+function closeViewer() {
+  document.getElementById("viewer").style.display = 'none';
+}
+
+function prevImage() {
+  currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+  document.getElementById("viewerImg").src = currentImages[currentIndex];
+}
+
+function nextImage() {
+  currentIndex = (currentIndex + 1) % currentImages.length;
+  document.getElementById("viewerImg").src = currentImages[currentIndex];
+}
+
+document.addEventListener("DOMContentLoaded", renderDetails);
+
+// Add zoom on mouse wheel
+document.getElementById("viewerImg").addEventListener("wheel", function (e) {
+  e.preventDefault();
+  let scale = parseFloat(this.style.transform.replace("scale(", "").replace(")", "")) || 1;
+  scale += e.deltaY * -0.001;
+  scale = Math.min(Math.max(1, scale), 3);
+  this.style.transform = `scale(${scale})`;
+});
+</script>
+
+</body>
+</html>
