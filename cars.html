@@ -1,504 +1,388 @@
+<!-- 文件：cars.html -->
 <!DOCTYPE html>
 <html lang="zh">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title data-i18n="title">老挝交易通 - 二手车</title>
+  <link rel="stylesheet" href="style.css" />
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0; padding: 0;
-    }
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       background: #0f0f1a;
       color: #fff;
-      animation: fadeInBody 1.2s ease both;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    @keyframes fadeInBody {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    header {
-      background: linear-gradient(to right, #00ffae, #00bfff);
-      color: #000;
-      padding: 40px 20px;
-      text-align: center;
-      animation: slideDown 1s ease-out both;
-      box-shadow: 0 4px 20px rgba(0, 255, 200, 0.6);
-    }
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-40px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    header h1 {
-      font-size: 2.4em;
-      font-weight: bold;
-      text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
-    }
-    .lang-buttons {
-      margin-top: 10px;
-    }
-    .lang-buttons button {
-      background: #fff;
-      color: #000;
-      border: none;
-      padding: 6px 14px;
-      border-radius: 18px;
-      margin: 0 5px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.3s ease;
-    }
-    .lang-buttons button:hover {
-      background: #00ffae;
-      color: #000;
-    }
-    main {
-      flex: 1;
-      padding: 40px 20px;
+      padding: 20px;
       max-width: 1200px;
       margin: auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 30px;
     }
-    .product-card {
-      background: #1c1c2c;
-      border-radius: 20px;
-      overflow: hidden;
+    h1 {
       text-align: center;
-      color: #fff;
-      box-shadow: 0 0 12px rgba(0, 255, 255, 0.2);
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-      border: 1px solid rgba(0,255,255,0.3);
-      position: relative;
-      cursor: pointer;
+      margin-bottom: 20px;
+      color: #00ffe0;
+    }
+    .filters {
       display: flex;
-      flex-direction: column;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 20px;
+      justify-content: center;
     }
-    .product-card::before {
-      content: '';
-      position: absolute;
-      top: -2px; left: -2px; right: -2px; bottom: -2px;
-      background: linear-gradient(45deg, #00ffe0, #00bfff, #00ffe0);
-      z-index: -1;
-      filter: blur(10px);
-      opacity: 0;
-      transition: opacity 0.5s ease;
+    .filters select {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: none;
+      font-size: 14px;
+    }
+    .lang-switch {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .lang-switch button {
+      background: #00bfff;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      padding: 8px 16px;
       border-radius: 20px;
+      cursor: pointer;
     }
-    .product-card:hover::before {
-      opacity: 1;
+    ul.car-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      padding: 0;
     }
-    .product-card:hover {
-      transform: translateY(-10px) scale(1.03);
-      box-shadow: 0 10px 30px rgba(0, 255, 255, 0.5);
+    ul.car-list li {
+      background: #1c1c2c;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(0,255,255,0.3);
+      cursor: pointer;
+      transition: transform 0.2s ease;
     }
-    .product-card img {
+    ul.car-list li:hover {
+      transform: scale(1.02);
+    }
+    ul.car-list img {
       width: 100%;
       height: 160px;
       object-fit: cover;
-      filter: brightness(1.1) contrast(1.1);
-      transition: transform 0.4s ease;
-      border-bottom: 1px solid #00ffae;
     }
-    .product-card:hover img {
-      transform: scale(1.05);
+    .car-info {
+      padding: 12px 16px;
     }
-    .product-card h3 {
-      margin: 15px 10px 8px;
-      font-size: 1.3em;
+    .car-title {
+      font-size: 1.2em;
       font-weight: bold;
       color: #00ffe0;
+      margin-bottom: 6px;
     }
-    .product-card:hover h3 {
+    .car-desc {
+      font-size: 0.9em;
+      color: #ccc;
+      margin-bottom: 6px;
+    }
+    .car-price {
+      font-weight: bold;
       color: #00ffbb;
     }
-    .product-card p {
-      margin: 0 15px 10px;
-      font-size: 0.9em;
-      color: #aaa;
-      flex-grow: 1;
-    }
-    .product-card .details {
-      font-size: 0.85em;
-      color: #66ffff;
-      margin: 5px 15px 15px;
-    }
-    .product-card .price {
-      color: #00ffae;
-      font-weight: bold;
-      margin-bottom: 15px;
-      font-size: 1.1em;
-    }
-    .product-card button.details-btn {
-      margin: 0 15px 15px;
-      padding: 10px;
-      background: linear-gradient(to right, #00ffae, #00bfff);
-      border: none;
-      border-radius: 30px;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    .product-card button.details-btn:hover {
-      background: linear-gradient(to right, #00bfff, #00ffae);
-    }
-
-    .controls {
-      max-width: 1200px;
-      margin: 20px auto;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-    .controls input[type="text"], .controls input[type="number"], .controls select {
-      padding: 10px 15px;
-      border-radius: 15px;
-      border: none;
-      font-size: 1em;
-      width: 220px;
-      max-width: 90vw;
-      box-shadow: 0 0 10px rgba(0,255,255,0.2);
-      background: #222233;
-      color: #fff;
-      outline: none;
-      transition: box-shadow 0.3s ease;
-    }
-    .controls input[type="text"]:focus,
-    .controls input[type="number"]:focus,
-    .controls select:focus {
-      box-shadow: 0 0 14px #00ffae;
-    }
-
-    .pagination {
-      text-align: center;
-      margin: 20px;
-      font-size: 1.1em;
-      user-select: none;
-    }
     .pagination button {
-      background: linear-gradient(to right, #00ffae, #00bfff);
+      margin: 0 6px;
+      padding: 6px 12px;
+      border-radius: 6px;
       border: none;
-      color: #000;
-      padding: 10px 20px;
-      margin: 0 15px;
-      border-radius: 30px;
       cursor: pointer;
-      font-weight: bold;
-      transition: transform 0.3s ease;
-    }
-    .pagination button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    .pagination button:hover:not(:disabled) {
-      transform: scale(1.1);
-    }
-
-    .back-home {
-      display: inline-block;
-      margin: 30px auto 40px;
-      padding: 12px 30px;
-      background: linear-gradient(to right, #00ffae, #00bfff);
+      background: #00bfff;
       color: #000;
-      font-weight: bold;
-      border-radius: 30px;
-      text-decoration: none;
-      box-shadow: 0 4px 12px rgba(0, 255, 200, 0.6);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      align-self: center;
+      font-weight: 600;
     }
-    .back-home:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 18px rgba(0, 255, 200, 0.8);
-    }
-
-    footer {
-      text-align: center;
-      padding: 15px 10px;
-      font-size: 0.9em;
-      color: #444;
-      background: #000814;
-      box-shadow: inset 0 1px 6px #00ffae;
-      user-select: none;
-    }
-
-    /* 📱 响应式布局 */
-    @media (max-width: 1024px) {
-      main {
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        padding: 30px 15px;
-        gap: 24px;
-      }
-      .product-card img {
-        height: 140px;
-      }
-    }
-    @media (max-width: 768px) {
-      header {
-        padding: 30px 15px;
-      }
-      header h1 {
-        font-size: 1.6em;
-      }
-      .controls input[type="text"], .controls input[type="number"], .controls select {
-        width: 100%;
-        max-width: 100%;
-      }
-      .back-home {
-        padding: 10px 20px;
-        font-size: 0.95em;
-      }
-      .product-card img {
-        height: 120px;
-      }
-    }
-    @media (max-width: 500px) {
-      main {
-        grid-template-columns: 1fr;
-        padding: 20px 10px;
-        gap: 20px;
-      }
-      .product-card img {
-        height: 180px;
-      }
+    .pagination button[disabled] {
+      background: #555;
+      color: #aaa;
+      cursor: default;
     }
   </style>
 </head>
 <body>
+  <h1 data-i18n="page_title">二手车列表</h1>
 
-<header>
-  <h1 data-i18n="cars">二手车列表</h1>
-  <div class="lang-buttons">
+  <div class="lang-switch">
     <button onclick="setLanguage('zh')">中文</button>
-    <button onclick="setLanguage('lo')">ພາສາລາວ</button>
+    <button onclick="setLanguage('lo')">ລາວ</button>
   </div>
-</header>
 
-<div class="controls">
-  <input type="text" id="searchInput" data-i18n-placeholder="search_placeholder" placeholder="搜索车辆..." />
-  <input type="number" id="minPrice" data-i18n-placeholder="min_price" placeholder="最低价" min="0" />
-  <input type="number" id="maxPrice" data-i18n-placeholder="max_price" placeholder="最高价" min="0" />
-  <select id="sortOrder">
-    <option value="default" data-i18n="sort_default">默认排序</option>
-    <option value="price_asc" data-i18n="sort_price_asc">价格升序</option>
-    <option value="price_desc" data-i18n="sort_price_desc">价格降序</option>
-  </select>
-</div>
+  <div class="filters">
+    <select id="brandFilter">
+      <option value="" data-i18n="all_brands">所有品牌</option>
+      <option value="Toyota">Toyota</option>
+      <option value="Honda">Honda</option>
+      <option value="Volkswagen">Volkswagen</option>
+    </select>
+    <select id="yearFilter">
+      <option value="" data-i18n="all_years">所有年份</option>
+      <option value="2015">2015</option>
+      <option value="2016">2016</option>
+      <option value="2017">2017</option>
+      <option value="2018">2018</option>
+    </select>
+    <select id="provinceFilter">
+      <option value="" data-i18n="all_provinces">所有省份</option>
+      <option value="ວຽງຈັນ">ວຽງຈັນ</option>
+      <option value="ຈຳປາສັກ">ຈຳປາສັກ</option>
+      <option value="ຫຼວງພຣະບາງ">ຫຼວງພຣະບາງ</option>
+    </select>
+    <select id="priceFilter">
+      <option value="" data-i18n="all_prices">所有价格</option>
+      <option value="<50000" data-i18n="price_lt_50000">少于 50000</option>
+      <option value="=50000" data-i18n="price_eq_50000">等于 50000</option>
+      <option value=">50000" data-i18n="price_gt_50000">大于 50000</option>
+    </select>
+    <select id="sortFilter">
+      <option value="" data-i18n="sort_default">默认排序</option>
+      <option value="asc" data-i18n="sort_price_asc">价格从低到高</option>
+      <option value="desc" data-i18n="sort_price_desc">价格从高到低</option>
+    </select>
+  </div>
 
-<main id="carContainer"></main>
+  <div class="pagination" id="paginationTop" style="text-align:center; margin-bottom: 16px;"></div>
+  <ul class="car-list" id="carList"></ul>
+  <div class="pagination" id="paginationBottom" style="text-align:center; margin-top: 16px;"></div>
 
-<div class="pagination">
-  <button id="prevPage" onclick="changePage(-1)" data-i18n="prev_page">上一页</button>
-  <span id="pageInfo"></span>
-  <button id="nextPage" onclick="changePage(1)" data-i18n="next_page">下一页</button>
-</div>
+  <script>
+    const carsData = [
+      {
+        id: 1,
+        brand: "Toyota",
+        year: 2015,
+        province: "ຈຳປາສັກ",
+        title_zh: "丰田卡罗拉 2015款",
+        title_lo: "Toyota Corolla ປີ 2015",
+        desc_zh: "自动挡，白色，行驶5万公里，保养良好",
+        desc_lo: "ອັດຕະໂນມັດ, ສີຂາວ, ຂັບໄປແລ້ວ 5 ແສນກິໂລແມັດ",
+        price: 45000,
+        img: "car-images/1/1.jpg"
+      },
+      {
+        id: 2,
+        brand: "Honda",
+        year: 2018,
+        province: "ວຽງຈັນ",
+        title_zh: "本田思域 2018款",
+        title_lo: "Honda Civic ປີ 2018",
+        desc_zh: "手动挡，红色，行驶3万公里，车况极佳",
+        desc_lo: "ມືມື, ສີແດງ, ຂັບໄປແລ້ວ 3 ແສນກິໂລແມັດ",
+        price: 60000,
+        img: "car-images/2/1.jpg"
+      },
+      {
+        id: 3,
+        brand: "Volkswagen",
+        year: 2017,
+        province: "ຫຼວງພຣະບາງ",
+        title_zh: "大众高尔夫 2017款",
+        title_lo: "Volkswagen Golf ປີ 2017",
+        desc_zh: "自动挡，黑色，行驶4万公里，低油耗",
+        desc_lo: "ອັດຕະໂນມັດ, ສີດຳ, ຂັບໄປແລ້ວ 4 ແສນກິໂລແມັດ",
+        price: 55000,
+        img: "car-images/3/1.jpg"
+      }
+      // 你可以根据需要增加更多数据来测试分页
+    ];
 
-<a href="index.html" class="back-home" data-i18n="back_home">返回首页</a>
+    const translations = {
+      zh: {
+        page_title: "二手车列表",
+        all_brands: "所有品牌",
+        all_years: "所有年份",
+        all_provinces: "所有省份",
+        all_prices: "所有价格",
+        price_lt_50000: "少于 50000",
+        price_eq_50000: "等于 50000",
+        price_gt_50000: "大于 50000",
+        sort_default: "默认排序",
+        sort_price_asc: "价格从低到高",
+        sort_price_desc: "价格从高到低",
+        page: "页",
+        prev: "上一页",
+        next: "下一页"
+      },
+      lo: {
+        page_title: "ລາຍການລົດມືສອງ",
+        all_brands: "ທຸກຍີ່ຫໍ້",
+        all_years: "ທຸກປີ",
+        all_provinces: "ທຸກແຂວງ",
+        all_prices: "ທຸກລາຄາ",
+        price_lt_50000: "ນ້ອຍກວ່າ 50000",
+        price_eq_50000: "ເທົ່າກັບ 50000",
+        price_gt_50000: "ຫຼາຍກວ່າ 50000",
+        sort_default: "ຈັດລຽງຕາມຄ່າປົກກະຕິ",
+        sort_price_asc: "ລາຄາຈາກຕ່ໍາໄປສູງ",
+        sort_price_desc: "ລາຄາຈາກສູງໄປຕ່ໍາ",
+        page: "ຫນ້າ",
+        prev: "ກັບຄືນ",
+        next: "ຕໍ່ໄປ"
+      }
+    };
 
-<footer>© 2025 老挝交易通 二手车交易平台</footer>
+    const itemsPerPage = 20;
+    let currentPage = 1;
+    let filteredCars = [];
 
-<script>
-const translations = {
-  zh: {
-    title: "老挝交易通 - 二手车",
-    cars: "二手车列表",
-    back_home: "返回首页",
-    search_placeholder: "搜索车辆...",
-    min_price: "最低价",
-    max_price: "最高价",
-    prev_page: "上一页",
-    next_page: "下一页",
-    page_info: (current, total) => `第 ${current} 页 / 共 ${total} 页`,
-    currency: "KIP",
-    sort_default: "默认排序",
-    sort_price_asc: "价格升序",
-    sort_price_desc: "价格降序",
-    car1_title: "丰田卡罗拉",
-    car1_desc: "省油耐用，适合城市代步，2018年款",
-    car2_title: "现代伊兰特",
-    car2_desc: "空间大，性能稳定，2020年款",
-    car3_title: "本田思域",
-    car3_desc: "运动版，动力十足，2019年款",
-    car4_title: "日产天籁",
-    car4_desc: "舒适静音，长途利器，2017年款",
-    transmission_auto: "自动",
-    transmission_manual: "手动",
-    fuel_petrol: "汽油",
-    fuel_diesel: "柴油",
-    label_year: "年份",
-    label_mileage: "里程",
-    label_transmission: "变速箱",
-    label_fuel: "燃料类型",
-    details_btn: "查看详情"
-  },
-  lo: {
-    title: "ລາຍການລົດມືສອງ",
-    cars: "ລາຍການລົດມືສອງ",
-    back_home: "ກັບໄປໜ້າຫຼັກ",
-    search_placeholder: "ຄົ້ນຫາລົດ...",
-    min_price: "ລາຄາຕ່ໍາສຸດ",
-    max_price: "ລາຄາສູງສຸດ",
-    prev_page: "ຫນ້າກ່ອນ",
-    next_page: "ຫນ້າຕໍ່ໄປ",
-    page_info: (current, total) => `ຫນ້າ ${current} / ${total}`,
-    currency: "₭",
-    sort_default: "ຈັດລຽງມາດຕະຖານ",
-    sort_price_asc: "ລາຄາຕໍ່ໍ່ຕ່ໍາ",
-    sort_price_desc: "ລາຄາຕໍ່ສູງ",
-    car1_title: "Toyota Corolla",
-    car1_desc: "ປະຫຍັດນໍ້າມັນ ຂັບງ່າຍ 2018",
-    car2_title: "Hyundai Elantra",
-    car2_desc: "ພື້ນທີ່ກວ້າງ ຂັບດີ 2020",
-    car3_title: "Honda Civic",
-    car3_desc: "ຮູບລັກສະໄຕ ສະເປີດ 2019",
-    car4_title: "Nissan Teana",
-    car4_desc: "ນັ່ງສະບາຍ ເງີບສະຫງົບ 2017",
-    transmission_auto: "ອັດຕະໂນມັດ",
-    transmission_manual: "ແບບມື",
-    fuel_petrol: "ນໍ້າມັນກົນ",
-    fuel_diesel: "ນໍ້າມັນດີເຊວ",
-    label_year: "ປີ",
-    label_mileage: "ລະຍະທາງ",
-    label_transmission: "ເກຍຣ",
-    label_fuel: "ປະເພດນໍ້າມັນ",
-    details_btn: "ເບິ່ງລາຍລະອຽດ"
-  }
-};
-
-const carDetails = [
-  { year: 2018, mileage: 45000, transmission: "auto", fuel: "petrol" },
-  { year: 2020, mileage: 30000, transmission: "manual", fuel: "diesel" },
-  { year: 2019, mileage: 37000, transmission: "auto", fuel: "petrol" },
-  { year: 2017, mileage: 52000, transmission: "auto", fuel: "petrol" }
-];
-
-const carList = [
-  { image: "car-images/car1/1.jpg", titleKey: "car1_title", descKey: "car1_desc", price: 42000000, details: carDetails[0] },
-  { image: "car-images/car2/2.jpg", titleKey: "car2_title", descKey: "car2_desc", price: 53000000, details: carDetails[1] },
-  { image: "car-images/car3/3.jpg", titleKey: "car3_title", descKey: "car3_desc", price: 48000000, details: carDetails[2] },
-  { image: "car-images/car4/4.jpg", titleKey: "car4_title", descKey: "car4_desc", price: 39000000, details: carDetails[3] }
-];
-
-let currentPage = 1;
-const itemsPerPage = 12;
-let filteredList = [...carList];
-
-function applyTranslations(lang) {
-  const dict = translations[lang];
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (typeof dict[key] === 'string') el.textContent = dict[key];
-    else if (typeof dict[key] === 'function' && el.id === 'pageInfo') {
-      const totalPages = Math.ceil(filteredList.length / itemsPerPage);
-      el.textContent = dict[key](currentPage, totalPages);
+    function getLang() {
+      return localStorage.getItem("siteLang") || "zh";
     }
-  });
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    const key = el.getAttribute('data-i18n-placeholder');
-    if (dict[key]) el.placeholder = dict[key];
-  });
-  document.title = dict.title;
-}
 
-function setLanguage(lang) {
-  localStorage.setItem('siteLang', lang);
-  applyTranslations(lang);
-  filterCars();
-}
+    function setLanguage(lang) {
+      localStorage.setItem("siteLang", lang);
+      applyTranslations(lang);
+      currentPage = 1;
+      renderList();
+    }
 
-function renderCars() {
-  const lang = localStorage.getItem('siteLang') || 'zh';
-  const dict = translations[lang];
-  const start = (currentPage - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  const items = filteredList.slice(start, end);
+    function applyTranslations(lang) {
+      const dict = translations[lang] || {};
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (dict[key]) el.textContent = dict[key];
+      });
+    }
 
-  const container = document.getElementById('carContainer');
-  container.innerHTML = '';
+    function filterAndSortCars() {
+      const brand = document.getElementById("brandFilter").value;
+      const year = document.getElementById("yearFilter").value;
+      const price = document.getElementById("priceFilter").value;
+      const province = document.getElementById("provinceFilter").value;
+      const sort = document.getElementById("sortFilter").value;
 
-  items.forEach(car => {
-    const card = document.createElement('div');
-    card.className = 'product-card';
-    card.innerHTML = `
-      <img src="${car.image}" alt="${dict[car.titleKey]}" />
-      <h3>${dict[car.titleKey]}</h3>
-      <p>${dict[car.descKey]}</p>
-      <div class="details">
-        ${dict.label_year}: ${car.details.year} |
-        ${dict.label_mileage}: ${car.details.mileage.toLocaleString()} km |
-        ${dict.label_transmission}: ${dict['transmission_' + car.details.transmission]} |
-        ${dict.label_fuel}: ${dict['fuel_' + car.details.fuel]}
-      </div>
-      <div class="price">${car.price.toLocaleString()} ${dict.currency}</div>
-      <button class="details-btn" data-i18n="details_btn">${dict.details_btn}</button>
-    `;
-    card.querySelector('button.details-btn').addEventListener('click', e => {
-      e.stopPropagation();
-      window.location.href = `car-detail.html?id=${carList.indexOf(car)}`;
+      filteredCars = carsData.filter(car => {
+        return (!brand || car.brand === brand) &&
+               (!year || car.year == year) &&
+               (!province || car.province === province) &&
+               (!price || (price == "<50000" && car.price < 50000) ||
+                          (price == ">50000" && car.price > 50000) ||
+                          (price == "=50000" && car.price == 50000));
+      });
+
+      if (sort === "asc") {
+        filteredCars.sort((a, b) => a.price - b.price);
+      } else if (sort === "desc") {
+        filteredCars.sort((a, b) => b.price - a.price);
+      }
+    }
+
+    function renderList() {
+      filterAndSortCars();
+      const lang = getLang();
+
+      const totalPages = Math.ceil(filteredCars.length / itemsPerPage);
+      if (currentPage > totalPages) currentPage = totalPages || 1; // 防止越界
+
+      const list = document.getElementById("carList");
+      list.innerHTML = "";
+
+      const startIdx = (currentPage - 1) * itemsPerPage;
+      const endIdx = startIdx + itemsPerPage;
+
+      const pageItems = filteredCars.slice(startIdx, endIdx);
+
+      pageItems.forEach(car => {
+        const title = lang === 'lo' ? car.title_lo : car.title_zh;
+        const desc = lang === 'lo' ? car.desc_lo : car.desc_zh;
+        const li = document.createElement("li");
+        li.onclick = () => location.href = `car-detail.html?id=${car.id}&lang=${lang}`;
+        li.innerHTML = `
+          <img src="${car.img}" alt="${title}">
+          <div class="car-info">
+            <div class="car-title">${title}</div>
+            <div class="car-desc">${desc}</div>
+            <div class="car-desc">📍 ${car.province}</div>
+            <div class="car-price">${car.price} USD</div>
+          </div>`;
+        list.appendChild(li);
+      });
+
+      renderPagination(totalPages);
+    }
+
+    function renderPagination(totalPages) {
+      const lang = getLang();
+      const paginationTop = document.getElementById("paginationTop");
+      const paginationBottom = document.getElementById("paginationBottom");
+
+      function createPageButton(page, text = null, disabled = false) {
+        const btn = document.createElement("button");
+        btn.textContent = text || page;
+        btn.disabled = disabled;
+        btn.onclick = () => {
+          if (!disabled) {
+            currentPage = page;
+            renderList();
+            window.scrollTo({top: 0, behavior: 'smooth'});
+          }
+        };
+        return btn;
+      }
+
+      paginationTop.innerHTML = "";
+      paginationBottom.innerHTML = "";
+
+      const prevBtnTop = createPageButton(currentPage - 1, translations[lang].prev, currentPage === 1);
+      const prevBtnBottom = createPageButton(currentPage - 1, translations[lang].prev, currentPage === 1);
+
+      const nextBtnTop = createPageButton(currentPage + 1, translations[lang].next, currentPage === totalPages || totalPages === 0);
+      const nextBtnBottom = createPageButton(currentPage + 1, translations[lang].next, currentPage === totalPages || totalPages === 0);
+
+      paginationTop.appendChild(prevBtnTop);
+      paginationBottom.appendChild(prevBtnBottom);
+
+      let startPage = Math.max(1, currentPage - 3);
+      let endPage = Math.min(totalPages, currentPage + 3);
+
+      if (endPage - startPage < 6) {
+        if (startPage === 1) {
+          endPage = Math.min(totalPages, startPage + 6);
+        } else if (endPage === totalPages) {
+          startPage = Math.max(1, endPage - 6);
+        }
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        const btnTop = createPageButton(i, i, i === currentPage);
+        const btnBottom = createPageButton(i, i, i === currentPage);
+        paginationTop.appendChild(btnTop);
+        paginationBottom.appendChild(btnBottom);
+      }
+
+      paginationTop.appendChild(nextBtnTop);
+      paginationBottom.appendChild(nextBtnBottom);
+
+      const pageTextTop = document.createElement("span");
+      const pageTextBottom = document.createElement("span");
+      pageTextTop.style.marginLeft = "12px";
+      pageTextBottom.style.marginLeft = "12px";
+      pageTextTop.style.color = "#00ffe0";
+      pageTextBottom.style.color = "#00ffe0";
+      pageTextTop.textContent = `${currentPage} / ${totalPages} ${translations[lang].page}`;
+      pageTextBottom.textContent = `${currentPage} / ${totalPages} ${translations[lang].page}`;
+
+      paginationTop.appendChild(pageTextTop);
+      paginationBottom.appendChild(pageTextBottom);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const lang = getLang();
+      applyTranslations(lang);
+      renderList();
+      ["brandFilter", "yearFilter", "priceFilter", "provinceFilter", "sortFilter"].forEach(id => {
+        document.getElementById(id).addEventListener("change", () => {
+          currentPage = 1;
+          renderList();
+        });
+      });
     });
-    card.addEventListener('click', () => {
-      window.location.href = `car-detail.html?id=${carList.indexOf(car)}`;
-    });
-    container.appendChild(card);
-  });
-
-  const totalPages = Math.ceil(filteredList.length / itemsPerPage);
-  document.getElementById('pageInfo').innerText = dict.page_info(currentPage, totalPages);
-  document.getElementById('prevPage').disabled = currentPage <= 1;
-  document.getElementById('nextPage').disabled = currentPage >= totalPages;
-  applyTranslations(lang);
-}
-
-function changePage(delta) {
-  const totalPages = Math.ceil(filteredList.length / itemsPerPage);
-  currentPage = Math.max(1, Math.min(currentPage + delta, totalPages));
-  renderCars();
-}
-
-function filterCars() {
-  const keyword = document.getElementById('searchInput').value.toLowerCase();
-  const min = parseFloat(document.getElementById('minPrice').value) || 0;
-  const maxVal = document.getElementById('maxPrice').value;
-  const max = maxVal === "" ? Infinity : parseFloat(maxVal);
-  const lang = localStorage.getItem('siteLang') || 'zh';
-  const dict = translations[lang];
-  const sortOrder = document.getElementById('sortOrder').value;
-
-  filteredList = carList.filter(c => {
-    const title = dict[c.titleKey].toLowerCase();
-    const desc = dict[c.descKey].toLowerCase();
-    return (title.includes(keyword) || desc.includes(keyword)) && c.price >= min && c.price <= max;
-  });
-
-  if (sortOrder === 'price_asc') {
-    filteredList.sort((a,b) => a.price - b.price);
-  } else if (sortOrder === 'price_desc') {
-    filteredList.sort((a,b) => b.price - a.price);
-  }
-
-  currentPage = 1;
-  renderCars();
-}
-
-window.setLanguage = setLanguage;
-document.addEventListener('DOMContentLoaded', () => {
-  const lang = localStorage.getItem('siteLang') || 'zh';
-  applyTranslations(lang);
-  renderCars();
-  document.getElementById('searchInput').addEventListener('input', filterCars);
-  document.getElementById('minPrice').addEventListener('input', filterCars);
-  document.getElementById('maxPrice').addEventListener('input', filterCars);
-  document.getElementById('sortOrder').addEventListener('change', filterCars);
-});
-</script>
+  </script>
 </body>
 </html>
