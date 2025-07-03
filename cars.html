@@ -48,6 +48,19 @@
       border-radius: 20px;
       cursor: pointer;
     }
+    .back-home {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .back-home a {
+      background: #00ffbb;
+      color: #000;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 10px 20px;
+      border-radius: 20px;
+      display: inline-block;
+    }
     ul.car-list {
       list-style: none;
       display: grid;
@@ -112,6 +125,10 @@
   <div class="lang-switch">
     <button onclick="setLanguage('zh')">中文</button>
     <button onclick="setLanguage('lo')">ລາວ</button>
+  </div>
+
+  <div class="back-home">
+    <a href="index.html" data-i18n="back_home">返回首页</a>
   </div>
 
   <div class="filters">
@@ -189,11 +206,11 @@
         price: 55000,
         img: "car-images/3/1.jpg"
       }
-      // 你可以根据需要增加更多数据来测试分页
     ];
 
     const translations = {
       zh: {
+        title: "老挝交易通 - 二手车",
         page_title: "二手车列表",
         all_brands: "所有品牌",
         all_years: "所有年份",
@@ -207,9 +224,11 @@
         sort_price_desc: "价格从高到低",
         page: "页",
         prev: "上一页",
-        next: "下一页"
+        next: "下一页",
+        back_home: "返回首页"
       },
       lo: {
+        title: "ລາວແຮງງານ - ລາຍການລົດມືສອງ",
         page_title: "ລາຍການລົດມືສອງ",
         all_brands: "ທຸກຍີ່ຫໍ້",
         all_years: "ທຸກປີ",
@@ -223,7 +242,8 @@
         sort_price_desc: "ລາຄາຈາກສູງໄປຕ່ໍາ",
         page: "ຫນ້າ",
         prev: "ກັບຄືນ",
-        next: "ຕໍ່ໄປ"
+        next: "ຕໍ່ໄປ",
+        back_home: "ກັບໄປໜ້າຫຼັກ"
       }
     };
 
@@ -276,9 +296,8 @@
     function renderList() {
       filterAndSortCars();
       const lang = getLang();
-
       const totalPages = Math.ceil(filteredCars.length / itemsPerPage);
-      if (currentPage > totalPages) currentPage = totalPages || 1; // 防止越界
+      if (currentPage > totalPages) currentPage = totalPages || 1;
 
       const list = document.getElementById("carList");
       list.innerHTML = "";
@@ -286,9 +305,7 @@
       const startIdx = (currentPage - 1) * itemsPerPage;
       const endIdx = startIdx + itemsPerPage;
 
-      const pageItems = filteredCars.slice(startIdx, endIdx);
-
-      pageItems.forEach(car => {
+      filteredCars.slice(startIdx, endIdx).forEach(car => {
         const title = lang === 'lo' ? car.title_lo : car.title_zh;
         const desc = lang === 'lo' ? car.desc_lo : car.desc_zh;
         const li = document.createElement("li");
@@ -331,7 +348,6 @@
 
       const prevBtnTop = createPageButton(currentPage - 1, translations[lang].prev, currentPage === 1);
       const prevBtnBottom = createPageButton(currentPage - 1, translations[lang].prev, currentPage === 1);
-
       const nextBtnTop = createPageButton(currentPage + 1, translations[lang].next, currentPage === totalPages || totalPages === 0);
       const nextBtnBottom = createPageButton(currentPage + 1, translations[lang].next, currentPage === totalPages || totalPages === 0);
 

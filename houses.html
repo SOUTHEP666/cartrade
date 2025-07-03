@@ -1,420 +1,325 @@
+<!-- 文件：houses.html -->
 <!DOCTYPE html>
 <html lang="zh">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title data-i18n="title">老挝交易通 - 房产</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="title">老挝交易通 - 房产列表</title>
   <style>
-* {
-  box-sizing: border-box;
-  margin: 0; padding: 0;
-}
-body {
-  font-family: 'Nunito', sans-serif;
-  background: linear-gradient(to bottom, #0d1b2a, #1b263b);
-  color: #e0f2f1;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-header {
-  background: linear-gradient(to right, #1e3c72, #2a5298);
-  color: #fff;
-  padding: 40px 20px 20px;
-  text-align: center;
-  box-shadow: 0 4px 16px rgba(0, 212, 255, 0.4);
-}
-header h1 {
-  font-size: 2.4em;
-  font-weight: 800;
-  margin-bottom: 10px;
-}
-.lang-buttons {
-  margin-top: 10px;
-}
-.lang-buttons button {
-  background: #e0f2f1;
-  color: #1e3c72;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 30px;
-  margin: 0 6px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.lang-buttons button:hover {
-  background: #00d4ff;
-  color: #fff;
-}
-.controls {
-  max-width: 1200px;
-  margin: 30px auto 10px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-}
-.controls input, .controls select {
-  padding: 10px 15px;
-  border-radius: 25px;
-  border: none;
-  width: 220px;
-  background: #243447;
-  color: #fff;
-  font-size: 1em;
-  box-shadow: 0 0 8px rgba(0, 212, 255, 0.15);
-  transition: all 0.3s ease;
-}
-.controls input:focus, .controls select:focus {
-  outline: none;
-  box-shadow: 0 0 10px #00d4ff;
-}
-main {
-  flex: 1;
-  padding: 40px 20px;
-  max-width: 1200px;
-  margin: auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 30px;
-}
-.property-card {
-  background: #1a2a3a;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 6px 16px rgba(0, 212, 255, 0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-}
-.property-card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 10px 28px rgba(0, 212, 255, 0.4);
-}
-.property-card img {
-  width: 100%;
-  height: 170px;
-  object-fit: cover;
-}
-.property-card h3 {
-  margin: 15px 15px 10px;
-  font-size: 1.3em;
-  font-weight: 700;
-  color: #00d4ff;
-}
-.property-card p {
-  margin: 0 15px 10px;
-  color: #b0bec5;
-  font-size: 0.95em;
-}
-.property-card .details {
-  margin: 5px 15px;
-  font-size: 0.85em;
-  color: #80deea;
-}
-.property-card .price {
-  margin: 10px 15px 15px;
-  font-weight: 700;
-  font-size: 1.1em;
-  color: #33ffaa;
-}
-.property-card .details-btn {
-  margin: 10px 15px 15px;
-  background: linear-gradient(to right, #00d4ff, #33ffaa);
-  border: none;
-  border-radius: 20px;
-  padding: 10px;
-  font-weight: bold;
-  cursor: pointer;
-  color: #002b36;
-  transition: background 0.3s ease;
-}
-.property-card .details-btn:hover {
-  background: linear-gradient(to right, #33ffaa, #00d4ff);
-  color: #000;
-}
-.pagination {
-  text-align: center;
-  margin: 20px;
-}
-.pagination button {
-  background: #00d4ff;
-  border: none;
-  padding: 10px 20px;
-  margin: 0 10px;
-  border-radius: 25px;
-  font-weight: bold;
-  cursor: pointer;
-  color: #002b36;
-  transition: background 0.3s ease;
-}
-.pagination button:hover:not(:disabled) {
-  background: #33ffaa;
-}
-.pagination button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-.back-home {
-  display: inline-block;
-  margin: 30px auto;
-  background: linear-gradient(to right, #00d4ff, #33ffaa);
-  padding: 12px 28px;
-  border-radius: 30px;
-  text-decoration: none;
-  font-weight: bold;
-  color: #002b36;
-  box-shadow: 0 4px 10px rgba(0, 212, 255, 0.4);
-  transition: transform 0.3s ease;
-}
-.back-home:hover {
-  transform: scale(1.05);
-  color: #000;
-}
-footer {
-  background: #121d2a;
-  color: #88a;
-  text-align: center;
-  padding: 15px;
-  font-size: 0.9em;
-}
-@media (max-width: 768px) {
-  .controls input, .controls select {
-    width: 100%;
-  }
-}
-
-  </style>
-
-
-<header>
-  <h1 data-i18n="real_house">房产列表</h1>
-  <div class="lang-buttons">
-    <button onclick="setLanguage('zh')">中文</button>
-    <button onclick="setLanguage('lo')">ພາສາລາວ</button>
-  </div>
-</header>
-
-<div class="controls">
-  <input type="text" id="searchInput" data-i18n-placeholder="search_placeholder" placeholder="搜索房产..." />
-  <input type="number" id="minPrice" data-i18n-placeholder="min_price" placeholder="最低价" min="0" />
-  <input type="number" id="maxPrice" data-i18n-placeholder="max_price" placeholder="最高价" min="0" />
-  <select id="sortOrder">
-    <option value="default" data-i18n="sort_default">默认排序</option>
-    <option value="price_asc" data-i18n="sort_price_asc">价格升序</option>
-    <option value="price_desc" data-i18n="sort_price_desc">价格降序</option>
-  </select>
-</div>
-
-<main id="propertyContainer"></main>
-
-<div class="pagination">
-  <button id="prevPage" onclick="changePage(-1)" data-i18n="prev_page">上一页</button>
-  <span id="pageInfo"></span>
-  <button id="nextPage" onclick="changePage(1)" data-i18n="next_page">下一页</button>
-</div>
-
-<a href="index.html" class="back-home" data-i18n="back_home">返回首页</a>
-
-<footer>© 2025 老挝交易通 房产交易平台</footer>
-
-<script>
-const translations = {
-  zh: {
-    title: "老挝交易通 - 房产",
-    real_house: "房产列表",
-    back_home: "返回首页",
-    search_placeholder: "搜索房产...",
-    min_price: "最低价",
-    max_price: "最高价",
-    prev_page: "上一页",
-    next_page: "下一页",
-    page_info: (current, total) => `第 ${current} 页 / 共 ${total} 页`,
-    currency: "KIP",
-    sort_default: "默认排序",
-    sort_price_asc: "价格升序",
-    sort_price_desc: "价格降序",
-    prop1_title: "市中心三室两厅",
-    prop1_desc: "地理位置优越，配套设施齐全，120㎡，高层",
-    prop2_title: "郊区别墅",
-    prop2_desc: "环境优美，私密性强，250㎡，带花园",
-    prop3_title: "精装修公寓",
-    prop3_desc: "现代设计，拎包入住，80㎡，中层",
-    prop4_title: "学区房",
-    prop4_desc: "教育资源丰富，交通便利，100㎡，低层",
-    label_area: "面积",
-    label_floor: "楼层",
-    label_room: "户型",
-    details_btn: "查看详情"
-  },
-  lo: {
-    title: "ລາຍການອະສັງຫາລື",
-    real_house: "ລາຍການອະສັງຫາລື",
-    back_home: "ກັບໄປໜ້າຫຼັກ",
-    search_placeholder: "ຄົ້ນຫາອະສັງຫາລື...",
-    min_price: "ລາຄາຕ່ໍາສຸດ",
-    max_price: "ລາຄາສູງສຸດ",
-    prev_page: "ຫນ້າກ່ອນ",
-    next_page: "ຫນ້າຕໍ່ໄປ",
-    page_info: (current, total) => `ຫນ້າ ${current} / ${total}`,
-    currency: "₭",
-    sort_default: "ຈັດລຽງມາດຕະຖານ",
-    sort_price_asc: "ລາຄາຕໍ່ໍ່ຕ່ໍາ",
-    sort_price_desc: "ລາຄາຕໍ່ສູງ",
-    prop1_title: "ອາພາດເມນ 3 ຫ້ອງນອນ",
-    prop1_desc: "ຕຳແໜ່ງການດີ, ສະບັບ 120㎡, ຊັ້ນສູງ",
-    prop2_title: "ບິລເລທົ່າລະບາຍ",
-    prop2_desc: "ສວນສີຂອງບ້ານ, ສ່ວນຕົວ, 250㎡",
-    prop3_title: "ອາພາດເມນຕົວຢ່າງດີ",
-    prop3_desc: "ອອກແບບທັນສະໄໝ, 80㎡, ຊັ້ນກາງ",
-    prop4_title: "ບ້ານພາຍໃນພື້ນທີ່ການສຶກສາ",
-    prop4_desc: "ສະບັບໃກ້ຮຽນ, 100㎡, ຊັ້ນຕ່ຳ",
-    label_area: "ພື້ນທີ່",
-    label_floor: "ຊັ້ນ",
-    label_room: "ຫ້ອງນອນ",
-    details_btn: "ເບິ່ງລາຍລະອຽດ"
-  }
-};
-
-// ✅ 多语言结构的楼层 + 户型
-const propertyDetails = [
-  {
-    area: 120,
-    floor: { zh: "高层", lo: "ຊັ້ນສູງ" },
-    room: { zh: "三室两厅", lo: "3 ຫ້ອງນອນ 2 ຫ້ອງນັ່ງ" }
-  },
-  {
-    area: 250,
-    floor: { zh: "独栋别墅", lo: "ວິລລ່າສ່ວນຕົວ" },
-    room: { zh: "四室三厅", lo: "4 ຫ້ອງນອນ 3 ຫ້ອງນັ່ງ" }
-  },
-  {
-    area: 80,
-    floor: { zh: "中层", lo: "ຊັ້ນກາງ" },
-    room: { zh: "一室一厅", lo: "1 ຫ້ອງນອນ 1 ຫ້ອງນັ່ງ" }
-  },
-  {
-    area: 100,
-    floor: { zh: "低层", lo: "ຊັ້ນຕ່ຳ" },
-    room: { zh: "三室一厅", lo: "3 ຫ້ອງນອນ 1 ຫ້ອງນັ່ງ" }
-  }
-];
-
-const propertyList = [
-  { image: "house-images/house1/1.jpg", titleKey: "prop1_title", descKey: "prop1_desc", price: 85000000, details: propertyDetails[0] },
-  { image: "house-images/house2/2.jpg", titleKey: "prop2_title", descKey: "prop2_desc", price: 135000000, details: propertyDetails[1] },
-  { image: "house-images/house3/3.jpg", titleKey: "prop3_title", descKey: "prop3_desc", price: 60000000, details: propertyDetails[2] },
-  { image: "house-images/house4/4.jpg", titleKey: "prop4_title", descKey: "prop4_desc", price: 75000000, details: propertyDetails[3] }
-];
-
-let currentPage = 1;
-const itemsPerPage = 12;
-let filteredList = [...propertyList];
-
-function applyTranslations(lang) {
-  const dict = translations[lang];
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (typeof dict[key] === 'string') el.textContent = dict[key];
-    else if (typeof dict[key] === 'function' && el.id === 'pageInfo') {
-      const totalPages = Math.ceil(filteredList.length / itemsPerPage);
-      el.textContent = dict[key](currentPage, totalPages);
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f0f1a;
+      color: #fff;
+      padding: 20px;
+      max-width: 1200px;
+      margin: auto;
     }
-  });
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    const key = el.getAttribute('data-i18n-placeholder');
-    if (dict[key]) el.placeholder = dict[key];
-  });
-  document.title = dict.title;
-}
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #00ffe0;
+    }
+    .filters, .lang-switch, .pagination {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    select, button {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: none;
+      font-size: 14px;
+    }
+    .lang-switch button {
+      background: #00bfff;
+      color: #000;
+      font-weight: bold;
+      border-radius: 20px;
+    }
+    .back-home {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .back-home a {
+      background: #00ffbb;
+      color: #000;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+    ul.house-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      padding: 0;
+    }
+    ul.house-list li {
+      background: #1c1c2c;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(0,255,255,0.3);
+      transition: transform 0.2s ease;
+      cursor: pointer;
+    }
+    ul.house-list li:hover {
+      transform: scale(1.02);
+    }
+    ul.house-list img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+    .house-info {
+      padding: 12px 16px;
+    }
+    .house-title {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #00ffe0;
+      margin-bottom: 6px;
+    }
+    .house-desc {
+      font-size: 0.9em;
+      color: #ccc;
+      margin-bottom: 6px;
+    }
+    .house-price {
+      font-weight: bold;
+      color: #00ffbb;
+    }
+    .pagination button[disabled] {
+      background: #555;
+      color: #aaa;
+      cursor: default;
+    }
+  </style>
+</head>
+<body>
+  <h1 data-i18n="page_title">房产列表</h1>
 
-function setLanguage(lang) {
-  localStorage.setItem('siteLang', lang);
-  applyTranslations(lang);
-  filterProperties();
-}
+  <div class="lang-switch">
+    <button onclick="setLanguage('zh')">中文</button>
+    <button onclick="setLanguage('lo')">ລາວ</button>
+  </div>
 
-function renderProperties() {
-  const lang = localStorage.getItem('siteLang') || 'zh';
-  const dict = translations[lang];
-  const start = (currentPage - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  const items = filteredList.slice(start, end);
+  <div class="back-home">
+    <a href="index.html" data-i18n="back_home">返回首页</a>
+  </div>
 
-  const container = document.getElementById('propertyContainer');
-  container.innerHTML = '';
+  <div class="filters">
+    <select id="provinceFilter">
+      <option value="" data-i18n="all_provinces">所有省份</option>
+      <option value="ວຽງຈັນ">ວຽງຈັນ</option>
+      <option value="ຈຳປາສັກ">ຈຳປາສັກ</option>
+      <option value="ຫຼວງພຣະບາງ">ຫຼວງພຣະບາງ</option>
+    </select>
+    <select id="priceFilter">
+      <option value="" data-i18n="all_prices">所有价格</option>
+      <option value="<100000" data-i18n="price_lt_100k">少于 100,000</option>
+      <option value="=100000" data-i18n="price_eq_100k">等于 100,000</option>
+      <option value=">100000" data-i18n="price_gt_100k">大于 100,000</option>
+    </select>
+    <select id="typeFilter">
+      <option value="" data-i18n="all_types">所有户型</option>
+      <option value="1室1厅">1室1厅</option>
+      <option value="2室1厅">2室1厅</option>
+      <option value="3室2厅">3室2厅</option>
+    </select>
+    <select id="sortFilter">
+      <option value="" data-i18n="sort_default">默认排序</option>
+      <option value="asc" data-i18n="sort_price_asc">价格从低到高</option>
+      <option value="desc" data-i18n="sort_price_desc">价格从高到低</option>
+    </select>
+  </div>
 
-  items.forEach(p => {
-    const card = document.createElement('div');
-    card.className = 'property-card';
-    card.innerHTML = `
-      <img src="${p.image}" alt="${dict[p.titleKey]}" />
-      <h3>${dict[p.titleKey]}</h3>
-      <p>${dict[p.descKey]}</p>
-      <div class="details">
-        ${dict.label_area}: ${p.details.area}㎡ |
-        ${dict.label_floor}: ${p.details.floor[lang]} |
-        ${dict.label_room}: ${p.details.room[lang]}
-      </div>
-      <div class="price">${p.price.toLocaleString()} ${dict.currency}</div>
-      <button class="details-btn">${dict.details_btn}</button>
-    `;
-    card.addEventListener('click', () => {
-      window.location.href = `house-detail.html?id=${propertyList.indexOf(p)}`;
+  <div class="pagination" id="paginationTop"></div>
+  <ul class="house-list" id="houseList"></ul>
+  <div class="pagination" id="paginationBottom"></div>
+
+  <script>
+    const housesData = [
+      {
+        id: 1,
+        title_zh: "万象3室2厅精装修公寓",
+        title_lo: "ຫ້ອງພັກ 3 ຫ້ອງນອນ 2 ຫ້ອງນັ່ງຫຼິ້ນ ທີ່ນະຄອນຫຼວງ",
+        desc_zh: "电梯房，高层，靠近商场，带家具",
+        desc_lo: "ຫ້ອງຢູ່ຊັ້ນສູງ, ມີເຟີນິເຈີ, ໃກ້ຕະຫຼາດ",
+        province: "ວຽງຈັນ",
+        type: "3室2厅",
+        price: 120000,
+        img: "house-images/1/1.jpg"
+      },
+      {
+        id: 2,
+        title_zh: "巴色2室1厅温馨住宅",
+        title_lo: "ບ້ານ 2 ຫ້ອງນອນ 1 ຫ້ອງນັ່ງຫຼິ້ນ ທີ່ຈຳປາສັກ",
+        desc_zh: "环境安静，适合居家，停车方便",
+        desc_lo: "ບ້ານສະຫງົບ, ເໝາະສໍາລັບຄອບຄົວ, ມີທີ່ຈອດລົດ",
+        province: "ຈຳປາສັກ",
+        type: "2室1厅",
+        price: 95000,
+        img: "house-images/2/1.jpg"
+      }
+    ];
+
+    const translations = {
+      zh: {
+        title: "老挝交易通 - 房产列表",
+        page_title: "房产列表",
+        all_provinces: "所有省份",
+        all_prices: "所有价格",
+        all_types: "所有户型",
+        price_lt_100k: "少于 100,000",
+        price_eq_100k: "等于 100,000",
+        price_gt_100k: "大于 100,000",
+        sort_default: "默认排序",
+        sort_price_asc: "价格从低到高",
+        sort_price_desc: "价格从高到低",
+        page: "页",
+        prev: "上一页",
+        next: "下一页",
+        back_home: "返回首页"
+      },
+      lo: {
+        title: "ລາວແຮງງານ - ລາຍການບ້ານ",
+        page_title: "ລາຍການບ້ານ",
+        all_provinces: "ທຸກແຂວງ",
+        all_prices: "ທຸກລາຄາ",
+        all_types: "ທຸກແບບຫ້ອງ",
+        price_lt_100k: "ນ້ອຍກວ່າ 100,000",
+        price_eq_100k: "ເທົ່າກັບ 100,000",
+        price_gt_100k: "ຫຼາຍກວ່າ 100,000",
+        sort_default: "ຈັດລຽງຕາມຄ່າປົກກະຕິ",
+        sort_price_asc: "ລາຄາຈາກຕ່ໍາໄປສູງ",
+        sort_price_desc: "ລາຄາຈາກສູງໄປຕ່ໍາ",
+        page: "ຫນ້າ",
+        prev: "ກັບຄືນ",
+        next: "ຕໍ່ໄປ",
+        back_home: "ກັບໄປໜ້າຫຼັກ"
+      }
+    };
+
+    const itemsPerPage = 10;
+    let currentPage = 1;
+    let filteredHouses = [];
+
+    function getLang() {
+      return localStorage.getItem("siteLang") || "zh";
+    }
+
+    function setLanguage(lang) {
+      localStorage.setItem("siteLang", lang);
+      applyTranslations(lang);
+      currentPage = 1;
+      renderList();
+    }
+
+    function applyTranslations(lang) {
+      const dict = translations[lang] || {};
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (dict[key]) el.textContent = dict[key];
+      });
+      document.title = dict.title || document.title;
+    }
+
+    function filterAndSortHouses() {
+      const province = document.getElementById("provinceFilter").value;
+      const price = document.getElementById("priceFilter").value;
+      const type = document.getElementById("typeFilter").value;
+      const sort = document.getElementById("sortFilter").value;
+
+      filteredHouses = housesData.filter(h => {
+        return (!province || h.province === province) &&
+               (!price || (price === "<100000" && h.price < 100000) ||
+                           (price === "=100000" && h.price == 100000) ||
+                           (price === ">100000" && h.price > 100000)) &&
+               (!type || h.type === type);
+      });
+
+      if (sort === "asc") filteredHouses.sort((a, b) => a.price - b.price);
+      if (sort === "desc") filteredHouses.sort((a, b) => b.price - a.price);
+    }
+
+    function renderList() {
+      filterAndSortHouses();
+      const lang = getLang();
+      const totalPages = Math.ceil(filteredHouses.length / itemsPerPage);
+      currentPage = Math.min(currentPage, totalPages || 1);
+
+      const list = document.getElementById("houseList");
+      list.innerHTML = "";
+
+      const start = (currentPage - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      filteredHouses.slice(start, end).forEach(h => {
+        const title = lang === 'lo' ? h.title_lo : h.title_zh;
+        const desc = lang === 'lo' ? h.desc_lo : h.desc_zh;
+        const li = document.createElement("li");
+        li.onclick = () => location.href = `house-detail.html?id=${h.id}&lang=${lang}`;
+        li.innerHTML = `
+          <img src="${h.img}" alt="${title}">
+          <div class="house-info">
+            <div class="house-title">${title}</div>
+            <div class="house-desc">${desc}</div>
+            <div class="house-desc">📍 ${h.province}</div>
+            <div class="house-price">${h.price} USD</div>
+          </div>`;
+        list.appendChild(li);
+      });
+
+      renderPagination(totalPages);
+    }
+
+    function renderPagination(totalPages) {
+      const lang = getLang();
+      const paginations = [document.getElementById("paginationTop"), document.getElementById("paginationBottom")];
+      paginations.forEach(p => p.innerHTML = "");
+
+      function createBtn(page, text = null, disabled = false) {
+        const btn = document.createElement("button");
+        btn.textContent = text || page;
+        btn.disabled = disabled;
+        btn.onclick = () => {
+          if (!disabled) {
+            currentPage = page;
+            renderList();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        };
+        return btn;
+      }
+
+      paginations.forEach(p => p.appendChild(createBtn(currentPage - 1, translations[lang].prev, currentPage === 1)));
+
+      for (let i = 1; i <= totalPages; i++) {
+        paginations.forEach(p => p.appendChild(createBtn(i, i, i === currentPage)));
+      }
+
+      paginations.forEach(p => {
+        p.appendChild(createBtn(currentPage + 1, translations[lang].next, currentPage === totalPages || totalPages === 0));
+        const span = document.createElement("span");
+        span.style.marginLeft = "12px";
+        span.style.color = "#00ffe0";
+        span.textContent = `${currentPage} / ${totalPages} ${translations[lang].page}`;
+        p.appendChild(span);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      applyTranslations(getLang());
+      renderList();
+      ["provinceFilter", "priceFilter", "typeFilter", "sortFilter"].forEach(id => {
+        document.getElementById(id).addEventListener("change", () => {
+          currentPage = 1;
+          renderList();
+        });
+      });
     });
-    container.appendChild(card);
-  });
-
-  const totalPages = Math.ceil(filteredList.length / itemsPerPage);
-  document.getElementById('pageInfo').innerText = dict.page_info(currentPage, totalPages);
-  document.getElementById('prevPage').disabled = currentPage <= 1;
-  document.getElementById('nextPage').disabled = currentPage >= totalPages;
-}
-
-function changePage(delta) {
-  const totalPages = Math.ceil(filteredList.length / itemsPerPage);
-  currentPage = Math.max(1, Math.min(currentPage + delta, totalPages));
-  renderProperties();
-}
-
-function filterProperties() {
-  const keyword = document.getElementById('searchInput').value.toLowerCase();
-  const min = parseFloat(document.getElementById('minPrice').value) || 0;
-  const max = parseFloat(document.getElementById('maxPrice').value) || Infinity;
-  const lang = localStorage.getItem('siteLang') || 'zh';
-  const dict = translations[lang];
-  const sortOrder = document.getElementById('sortOrder').value;
-
-  filteredList = propertyList.filter(p => {
-    const title = dict[p.titleKey].toLowerCase();
-    const desc = dict[p.descKey].toLowerCase();
-    return (title.includes(keyword) || desc.includes(keyword)) && p.price >= min && p.price <= max;
-  });
-
-  if (sortOrder === 'price_asc') {
-    filteredList.sort((a, b) => a.price - b.price);
-  } else if (sortOrder === 'price_desc') {
-    filteredList.sort((a, b) => b.price - a.price);
-  }
-
-  currentPage = 1;
-  renderProperties();
-}
-
-window.setLanguage = setLanguage;
-document.addEventListener('DOMContentLoaded', () => {
-  const lang = localStorage.getItem('siteLang') || 'zh';
-  applyTranslations(lang);
-  renderProperties();
-  document.getElementById('searchInput').addEventListener('input', filterProperties);
-  document.getElementById('minPrice').addEventListener('input', filterProperties);
-  document.getElementById('maxPrice').addEventListener('input', filterProperties);
-  document.getElementById('sortOrder').addEventListener('change', filterProperties);
-});
-</script>
-
+  </script>
 </body>
 </html>

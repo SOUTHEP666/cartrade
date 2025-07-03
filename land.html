@@ -3,265 +3,341 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title id="page-title">土地交易</title>
+  <title data-i18n="title">老挝交易通 - 土地列表</title>
   <style>
     body {
-      font-family: 'Microsoft YaHei', sans-serif;
-      background: #f3f4f2;
-      margin: 0;
-      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f0f1a;
+      color: #fff;
+      padding: 20px;
+      max-width: 1200px;
+      margin: auto;
     }
-
-    header {
-      background: #64a95f;
-      color: white;
-      padding: 30px 0;
+    h1 {
       text-align: center;
+      margin-bottom: 20px;
+      color: #00ffe0;
     }
-
-    .lang-switch {
-      margin-top: 10px;
-    }
-
-    .lang-switch button {
-      margin: 0 5px;
-      padding: 6px 12px;
-      border: none;
-      border-radius: 16px;
-      background: white;
-      color: #4a7c46;
-      cursor: pointer;
-    }
-
-    .filters {
+    .filters, .lang-switch, .pagination {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
-      background: #e4f2dd;
-      padding: 20px;
+      gap: 12px;
+      margin-bottom: 16px;
     }
-
-    .filters input, .filters select {
-      padding: 8px;
+    select, button {
+      padding: 8px 12px;
       border-radius: 6px;
-      border: 1px solid #ccc;
+      border: none;
+      font-size: 14px;
     }
-
-    .grid {
+    .lang-switch button {
+      background: #00bfff;
+      color: #000;
+      font-weight: bold;
+      border-radius: 20px;
+    }
+    .back-home {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .back-home a {
+      background: #00ffbb;
+      color: #000;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+    ul.land-list {
+      list-style: none;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-      padding: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      padding: 0;
     }
-
-    .card {
-      background: white;
-      border-radius: 10px;
+    ul.land-list li {
+      background: #1c1c2c;
+      border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border: 1px solid rgba(0,255,255,0.3);
+      transition: transform 0.2s ease;
       cursor: pointer;
-      transition: transform 0.2s;
     }
-
-    .card:hover {
-      transform: translateY(-5px);
+    ul.land-list li:hover {
+      transform: scale(1.02);
     }
-
-    .card img {
+    ul.land-list img {
       width: 100%;
       height: 160px;
       object-fit: cover;
     }
-
-    .card .info {
-      padding: 15px;
+    .land-info {
+      padding: 12px 16px;
     }
-
-    .card h3 {
-      margin: 0 0 10px;
-      font-size: 18px;
-      color: #3d6c3c;
-    }
-
-    .card p {
-      margin: 0 0 10px;
-      font-size: 14px;
-      color: #555;
-    }
-
-    .card .price {
+    .land-title {
+      font-size: 1.2em;
       font-weight: bold;
-      color: #64a95f;
+      color: #00ffe0;
+      margin-bottom: 6px;
     }
-
-    .pagination {
-      text-align: center;
-      margin: 20px;
+    .land-desc {
+      font-size: 0.9em;
+      color: #ccc;
+      margin-bottom: 6px;
     }
-
-    .pagination button {
-      padding: 8px 16px;
-      margin: 0 5px;
-      border: none;
-      background: #a5d78d;
-      border-radius: 16px;
-      cursor: pointer;
+    .land-price {
+      font-weight: bold;
+      color: #00ffbb;
+    }
+    .pagination button[disabled] {
+      background: #555;
+      color: #aaa;
+      cursor: default;
     }
   </style>
 </head>
 <body>
+  <h1 data-i18n="page_title">土地列表</h1>
 
-<header>
-  <h1 id="title">土地列表</h1>
   <div class="lang-switch">
-    <button onclick="setLang('zh')">中文</button>
-    <button onclick="setLang('lo')">ລາວ</button>
+    <button onclick="setLanguage('zh')">中文</button>
+    <button onclick="setLanguage('lo')">ລາວ</button>
   </div>
-</header>
 
-<div class="filters">
-  <input type="text" id="search" placeholder="搜索..." />
-  <input type="number" id="minPrice" placeholder="最低价" />
-  <input type="number" id="maxPrice" placeholder="最高价" />
-  <select id="sort">
-    <option value="default">默认排序</option>
-    <option value="asc">价格升序</option>
-    <option value="desc">价格降序</option>
-  </select>
-</div>
+  <div class="back-home">
+    <a href="index.html" data-i18n="back_home">返回首页</a>
+  </div>
 
-<div class="grid" id="list"></div>
+  <div class="filters">
+    <select id="provinceFilter">
+      <option value="" data-i18n="all_provinces">所有省份</option>
+      <option value="ວຽງຈັນ">ວຽງຈັນ</option>
+      <option value="ຈຳປາສັກ">ຈຳປາສັກ</option>
+      <option value="ຫຼວງພຣະບາງ">ຫຼວງພຣະບາງ</option>
+    </select>
 
-<div class="pagination">
-  <button onclick="prevPage()" id="prevBtn">上一页</button>
-  <span id="pageInfo">第 1 页</span>
-  <button onclick="nextPage()" id="nextBtn">下一页</button>
-</div>
+    <select id="priceFilter">
+      <option value="" data-i18n="all_prices">所有价格</option>
+      <option value="<50000" data-i18n="price_lt_50k">少于 50,000</option>
+      <option value="50000-100000" data-i18n="price_50k_100k">50,000 - 100,000</option>
+      <option value=">100000" data-i18n="price_gt_100k">大于 100,000</option>
+    </select>
 
-<script>
-const data = [
-  { id: 0, title_zh: "市中心商业地", title_lo: "ທີ່ດິນໃນເມືອງ", desc_zh: "适合建商铺", desc_lo: "ເໝາະຮ້ານຄ້າ", price: 30000000, image: "land-images/land1/1.jpg" },
-  { id: 1, title_zh: "郊区农业地", title_lo: "ທີ່ດິນກະສິກໍາ", desc_zh: "适合种植养殖", desc_lo: "ປູກຜັກໄດ້", price: 18000000, image: "land-images/land2/2.jpg" },
-  { id: 2, title_zh: "湄公河边地", title_lo: "ທີ່ດິນຕາມແມ່ນ້ຳ", desc_zh: "风景优美", desc_lo: "ທິວທັດງາມ", price: 26000000, image: "land-images/land3/3.jpg" },
-  { id: 3, title_zh: "工业区仓储地", title_lo: "ທີ່ດິນໂຮງງານ", desc_zh: "适合建设厂房", desc_lo: "ສ້າງໂຮງງານ", price: 32000000, image: "land-images/land4/4.jpg" }
-];
+    <select id="typeFilter">
+      <option value="" data-i18n="all_types">所有类型</option>
+      <option value="住宅用地">住宅用地</option>
+      <option value="商业用地">商业用地</option>
+      <option value="农用地">农用地</option>
+    </select>
 
-const translations = {
-  zh: {
-    title: "土地列表",
-    pageTitle: "土地交易",
-    search: "搜索...",
-    minPrice: "最低价",
-    maxPrice: "最高价",
-    sortDefault: "默认排序",
-    sortAsc: "价格升序",
-    sortDesc: "价格降序",
-    prev: "上一页",
-    next: "下一页",
-    pageInfo: (page, total) => `第 ${page} 页`
-  },
-  lo: {
-    title: "ລາຍການທີ່ດິນ",
-    pageTitle: "ການຊື້ຂາຍທີ່ດິນ",
-    search: "ຄົ້ນຫາ...",
-    minPrice: "ລາຄາຕໍ່າສຸດ",
-    maxPrice: "ລາຄາສູງສຸດ",
-    sortDefault: "ຈັດລຽງປົກກະຕິ",
-    sortAsc: "ລາຄາຕໍ່ໍ່ຕ່ໍາ",
-    sortDesc: "ລາຄາຕໍ່ສູງ",
-    prev: "ຫນ້າກ່ອນ",
-    next: "ຫນ້າຕໍ່ໄປ",
-    pageInfo: (page, total) => `ຫນ້າ ${page}`
-  }
-};
+    <select id="sortFilter">
+      <option value="" data-i18n="sort_default">默认排序</option>
+      <option value="asc" data-i18n="sort_price_asc">价格从低到高</option>
+      <option value="desc" data-i18n="sort_price_desc">价格从高到低</option>
+    </select>
+  </div>
 
-let currentLang = localStorage.getItem('lang') || 'zh';
-let currentPage = 1;
-const itemsPerPage = 12;
+  <div class="pagination" id="paginationTop"></div>
 
-function setLang(lang) {
-  currentLang = lang;
-  localStorage.setItem('lang', lang);
-  updateTexts();
-  render();
-}
+  <ul class="land-list" id="landList"></ul>
 
-function updateTexts() {
-  const t = translations[currentLang];
-  document.getElementById('title').innerText = t.title;
-  document.getElementById('page-title').innerText = t.pageTitle;
-  document.getElementById('search').placeholder = t.search;
-  document.getElementById('minPrice').placeholder = t.minPrice;
-  document.getElementById('maxPrice').placeholder = t.maxPrice;
+  <div class="pagination" id="paginationBottom"></div>
 
-  const sort = document.getElementById('sort');
-  sort.options[0].text = t.sortDefault;
-  sort.options[1].text = t.sortAsc;
-  sort.options[2].text = t.sortDesc;
+  <script>
+    const landsData = [
+      {
+        id: 1,
+        title_zh: "万象市中心住宅用地",
+        title_lo: "ທີ່ດິນທີ່ຢູ່ກາງນະຄອນວຽງຈັນ",
+        desc_zh: "交通便利，适合住宅开发",
+        desc_lo: "ຂໍ້ມູນສະດວກ, ເໝາະສໍາລັບການພັດທະນາບ້ານ",
+        province: "ວຽງຈັນ",
+        type: "住宅用地",
+        price: 80000,
+        img: "land-images/1/1.jpg"
+      },
+      {
+        id: 2,
+        title_zh: "巴色商业用地",
+        title_lo: "ທີ່ດິນທຸລະກິດ ບ້ານປາເຊ",
+        desc_zh: "地处繁华区域，适合开店",
+        desc_lo: "ຕັ້ງຢູ່ເຂດສຸກສົດ, ເໝາະສໍາລັບຮ້ານຄ້າ",
+        province: "ຈຳປາສັກ",
+        type: "商业用地",
+        price: 120000,
+        img: "land-images/2/1.jpg"
+      },
+      {
+        id: 3,
+        title_zh: "琅勃拉邦农用地",
+        title_lo: "ທີ່ດິນເກດເກີດ ຫຼວງພຣະບາງ",
+        desc_zh: "肥沃土地，适合种植",
+        desc_lo: "ດິນອຸດົມ, ເໝາະສໍາລັບການເກັບກຽມ",
+        province: "ຫຼວງພຣະບາງ",
+        type: "农用地",
+        price: 40000,
+        img: "land-images/3/1.jpg"
+      }
+    ];
 
-  document.getElementById('prevBtn').innerText = t.prev;
-  document.getElementById('nextBtn').innerText = t.next;
-}
+    const translations = {
+      zh: {
+        title: "老挝交易通 - 土地列表",
+        page_title: "土地列表",
+        all_provinces: "所有省份",
+        all_prices: "所有价格",
+        all_types: "所有类型",
+        price_lt_50k: "少于 50,000",
+        price_50k_100k: "50,000 - 100,000",
+        price_gt_100k: "大于 100,000",
+        sort_default: "默认排序",
+        sort_price_asc: "价格从低到高",
+        sort_price_desc: "价格从高到低",
+        page: "页",
+        prev: "上一页",
+        next: "下一页",
+        back_home: "返回首页"
+      },
+      lo: {
+        title: "ລາວແຮງງານ - ລາຍການທີ່ດິນ",
+        page_title: "ລາຍການທີ່ດິນ",
+        all_provinces: "ທຸກແຂວງ",
+        all_prices: "ທຸກລາຄາ",
+        all_types: "ທຸກປະເພດ",
+        price_lt_50k: "ນ້ອຍກວ່າ 50,000",
+        price_50k_100k: "50,000 - 100,000",
+        price_gt_100k: "ຫຼາຍກວ່າ 100,000",
+        sort_default: "ຈັດລຽງຕາມຄ່າປົກກະຕິ",
+        sort_price_asc: "ລາຄາຈາກຕ່ໍາໄປສູງ",
+        sort_price_desc: "ລາຄາຈາກສູງໄປຕ່ໍາ",
+        page: "ຫນ້າ",
+        prev: "ກັບຄືນ",
+        next: "ຕໍ່ໄປ",
+        back_home: "ກັບໄປໜ້າຫຼັກ"
+      }
+    };
 
-function render() {
-  const t = translations[currentLang];
-  const search = document.getElementById('search').value.toLowerCase();
-  const min = parseFloat(document.getElementById('minPrice').value) || 0;
-  const max = parseFloat(document.getElementById('maxPrice').value) || Infinity;
-  const sort = document.getElementById('sort').value;
+    const itemsPerPage = 10;
+    let currentPage = 1;
+    let filteredLands = [];
 
-  let filtered = data.filter(item => {
-    const title = item['title_' + currentLang].toLowerCase();
-    const desc = item['desc_' + currentLang].toLowerCase();
-    return (title.includes(search) || desc.includes(search)) && item.price >= min && item.price <= max;
-  });
+    function getLang() {
+      return localStorage.getItem("siteLang") || "zh";
+    }
 
-  if (sort === 'asc') filtered.sort((a,b) => a.price - b.price);
-  if (sort === 'desc') filtered.sort((a,b) => b.price - a.price);
+    function setLanguage(lang) {
+      localStorage.setItem("siteLang", lang);
+      applyTranslations(lang);
+      currentPage = 1;
+      renderList();
+    }
 
-  const start = (currentPage - 1) * itemsPerPage;
-  const items = filtered.slice(start, start + itemsPerPage);
+    function applyTranslations(lang) {
+      const dict = translations[lang] || {};
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (dict[key]) el.textContent = dict[key];
+      });
+      document.title = dict.title || document.title;
+    }
 
-  const container = document.getElementById('list');
-  container.innerHTML = '';
+    function filterAndSortLands() {
+      const province = document.getElementById("provinceFilter").value;
+      const price = document.getElementById("priceFilter").value;
+      const type = document.getElementById("typeFilter").value;
+      const sort = document.getElementById("sortFilter").value;
 
-  for (const land of items) {
-    const div = document.createElement('div');
-    div.className = 'card';
-    div.innerHTML = `
-      <img src="${land.image}" />
-      <div class="info">
-        <h3>${land['title_' + currentLang]}</h3>
-        <p>${land['desc_' + currentLang]}</p>
-        <div class="price">${land.price.toLocaleString()} ₭</div>
-      </div>
-    `;
-    div.onclick = () => window.location.href = `land-detail.html?id=${land.id}`;
-    container.appendChild(div);
-  }
+      filteredLands = landsData.filter(l => {
+        const priceCheck = !price || (
+          (price === "<50000" && l.price < 50000) ||
+          (price === "50000-100000" && l.price >= 50000 && l.price <= 100000) ||
+          (price === ">100000" && l.price > 100000)
+        );
+        return (!province || l.province === province) &&
+               priceCheck &&
+               (!type || l.type === type);
+      });
 
-  document.getElementById('pageInfo').innerText = t.pageInfo(currentPage, Math.ceil(filtered.length / itemsPerPage));
-}
+      if (sort === "asc") filteredLands.sort((a, b) => a.price - b.price);
+      if (sort === "desc") filteredLands.sort((a, b) => b.price - a.price);
+    }
 
-function nextPage() {
-  currentPage++;
-  render();
-}
-function prevPage() {
-  currentPage = Math.max(1, currentPage - 1);
-  render();
-}
+    function renderList() {
+      filterAndSortLands();
+      const lang = getLang();
+      const totalPages = Math.ceil(filteredLands.length / itemsPerPage);
+      currentPage = Math.min(currentPage, totalPages || 1);
 
-document.getElementById('search').addEventListener('input', () => { currentPage = 1; render(); });
-document.getElementById('minPrice').addEventListener('input', () => { currentPage = 1; render(); });
-document.getElementById('maxPrice').addEventListener('input', () => { currentPage = 1; render(); });
-document.getElementById('sort').addEventListener('change', () => { currentPage = 1; render(); });
+      const list = document.getElementById("landList");
+      list.innerHTML = "";
 
-setLang(currentLang);
-</script>
+      const start = (currentPage - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      filteredLands.slice(start, end).forEach(l => {
+        const title = lang === 'lo' ? l.title_lo : l.title_zh;
+        const desc = lang === 'lo' ? l.desc_lo : l.desc_zh;
+        const li = document.createElement("li");
+        li.onclick = () => location.href = `land-detail.html?id=${l.id}&lang=${lang}`;
+        li.innerHTML = `
+          <img src="${l.img}" alt="${title}">
+          <div class="land-info">
+            <div class="land-title">${title}</div>
+            <div class="land-desc">${desc}</div>
+            <div class="land-desc">📍 ${l.province}</div>
+            <div class="land-price">${l.price} USD</div>
+          </div>`;
+        list.appendChild(li);
+      });
 
+      renderPagination(totalPages);
+    }
+
+    function renderPagination(totalPages) {
+      const lang = getLang();
+      const paginations = [document.getElementById("paginationTop"), document.getElementById("paginationBottom")];
+      paginations.forEach(p => p.innerHTML = "");
+
+      function createBtn(page, text = null, disabled = false) {
+        const btn = document.createElement("button");
+        btn.textContent = text || page;
+        btn.disabled = disabled;
+        btn.onclick = () => {
+          if (!disabled) {
+            currentPage = page;
+            renderList();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        };
+        return btn;
+      }
+
+      paginations.forEach(p => p.appendChild(createBtn(currentPage - 1, translations[lang].prev, currentPage === 1)));
+
+      for (let i = 1; i <= totalPages; i++) {
+        paginations.forEach(p => p.appendChild(createBtn(i, i, i === currentPage)));
+      }
+
+      paginations.forEach(p => {
+        p.appendChild(createBtn(currentPage + 1, translations[lang].next, currentPage === totalPages || totalPages === 0));
+        const span = document.createElement("span");
+        span.style.marginLeft = "12px";
+        span.style.color = "#00ffe0";
+        span.textContent = `${currentPage} / ${totalPages} ${translations[lang].page}`;
+        p.appendChild(span);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      applyTranslations(getLang());
+      renderList();
+      ["provinceFilter", "priceFilter", "typeFilter", "sortFilter"].forEach(id => {
+        document.getElementById(id).addEventListener("change", () => {
+          currentPage = 1;
+          renderList();
+        });
+      });
+    });
+  </script>
 </body>
 </html>
