@@ -1,33 +1,26 @@
-<!-- 文件：car-detail.html -->
 <!DOCTYPE html>
 <html lang="zh">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title data-i18n="title">车辆详情 - 老挝交易通</title>
-  <link rel="stylesheet" href="style.css" />
+  <title data-i18n="detail_title">车辆详情</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
       background: #0f0f1a;
+      font-family: 'Segoe UI', sans-serif;
       color: #fff;
-      max-width: 900px;
-      margin: 20px auto;
       padding: 20px;
-      border-radius: 12px;
-      border: 1px solid rgba(0, 255, 255, 0.3);
-      box-shadow: 0 0 15px #00ffe0aa;
+      max-width: 900px;
+      margin: auto;
     }
     h1 {
       text-align: center;
       color: #00ffe0;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
     .lang-switch {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 24px;
+      text-align: center;
+      margin-bottom: 20px;
     }
     .lang-switch button {
       background: #00bfff;
@@ -36,317 +29,224 @@
       border: none;
       padding: 8px 16px;
       border-radius: 20px;
+      margin: 0 10px;
       cursor: pointer;
     }
-    .back-btn {
-      display: inline-block;
-      margin-bottom: 16px;
-      background: #00bfff;
-      color: #000;
-      padding: 8px 16px;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: 600;
-      user-select: none;
-      transition: background-color 0.3s ease;
-    }
-    .back-btn:hover {
-      background: #00ffe0;
-      color: #000;
-    }
-
-    .container {
+    .car-gallery {
       display: flex;
-      flex-wrap: wrap;
-      gap: 24px;
-      justify-content: center;
-    }
-
-    /* 左侧图片区 */
-    .gallery {
-      flex: 1 1 320px;
-      max-width: 400px;
-      border-radius: 16px;
-      overflow: hidden;
-      background: #1c1c2c;
-      border: 1px solid rgba(0,255,255,0.3);
-      box-shadow: 0 0 10px #00ffe0aa;
-      user-select: none;
-    }
-    .main-image-container {
-      position: relative;
-      width: 100%;
-      padding-top: 66.66%; /* 3:2 ratio */
-      overflow: hidden;
-      cursor: grab;
-      background: #000;
-    }
-    .main-image-container img {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: auto;
-      height: 100%;
-      max-width: none;
-      max-height: none;
-      transform: translate(-50%, -50%) scale(1);
-      transition: transform 0.3s ease;
-      user-select: none;
-    }
-    .main-image-container.grabbing {
-      cursor: grabbing;
-    }
-
-    .thumbnails {
-      display: flex;
-      gap: 8px;
-      padding: 8px;
+      gap: 10px;
       overflow-x: auto;
-      background: #111;
-    }
-    .thumbnails img {
-      width: 60px;
-      height: 40px;
-      object-fit: cover;
-      border-radius: 8px;
-      border: 2px solid transparent;
-      cursor: pointer;
-      transition: border-color 0.3s ease;
-      flex-shrink: 0;
-    }
-    .thumbnails img.selected {
-      border-color: #00ffe0;
-    }
-
-    /* 右侧详情区 */
-    .details {
-      flex: 1 1 400px;
-      max-width: 480px;
-      background: #1c1c2c;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 0 10px #00ffe0aa;
-      user-select: text;
-    }
-    .details .title {
-      font-size: 1.8em;
-      font-weight: bold;
-      color: #00ffe0;
-      margin-bottom: 16px;
-    }
-    .details .price {
-      font-size: 1.6em;
-      font-weight: 700;
-      color: #00ffbb;
       margin-bottom: 20px;
     }
-    .details .info-row {
+    .car-gallery img {
+      width: 180px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 2px solid #00bfff;
+      transition: transform 0.3s ease;
+    }
+    .car-gallery img:hover {
+      transform: scale(1.05);
+    }
+    .car-details {
+      background: #1c1c2c;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,255,255,0.2);
+    }
+    .car-details div {
       margin-bottom: 12px;
       font-size: 1em;
-      color: #ccc;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
     }
-    .details .info-row span {
-      flex-basis: 45%;
-      margin-bottom: 6px;
+    .label {
+      color: #00ffe0;
+      margin-right: 6px;
     }
-    .details .description {
+    .btn-buy {
+      display: inline-block;
+      background: #00ffbb;
+      color: #000;
+      padding: 10px 20px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
       margin-top: 20px;
-      font-size: 1.1em;
-      line-height: 1.5;
-      color: #eee;
-      white-space: pre-wrap;
-      border-top: 1px solid #00ffe044;
-      padding-top: 12px;
     }
-    .no-data {
+    .back-button {
+      display: block;
       text-align: center;
-      color: #ff5555;
-      font-size: 1.5em;
-      margin-top: 40px;
+      margin-top: 30px;
     }
-
-    /* 控制缩放按钮 */
-    .zoom-controls {
-      position: absolute;
-      top: 8px;
-      right: 8px;
+    .back-button a {
+      background: #00bfff;
+      color: #000;
+      padding: 10px 20px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.9);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      flex-direction: column;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80%;
+      margin-bottom: 10px;
+    }
+    .lightbox-controls {
       display: flex;
-      gap: 8px;
-      z-index: 10;
+      justify-content: center;
+      gap: 20px;
     }
-    .zoom-controls button {
-      background: #00bfffcc;
+    .lightbox button {
+      background: #00bfff;
+      color: #000;
       border: none;
-      padding: 4px 10px;
-      border-radius: 8px;
+      padding: 8px 16px;
+      border-radius: 10px;
       font-weight: bold;
       cursor: pointer;
-      color: #000;
-      user-select: none;
-      transition: background-color 0.3s ease;
-    }
-    .zoom-controls button:hover {
-      background: #00ffe0cc;
     }
   </style>
 </head>
 <body>
-  <h1 data-i18n="page_title">车辆详情</h1>
+  <h1 data-i18n="detail_title">车辆详情</h1>
 
   <div class="lang-switch">
-    <button id="btnZh" onclick="setLanguage('zh')">中文</button>
-    <button id="btnLo" onclick="setLanguage('lo')">ລາວ</button>
+    <button onclick="setLanguage('zh')">中文</button>
+    <button onclick="setLanguage('lo')">ລາວ</button>
   </div>
 
-  <a href="#" class="back-btn" id="backBtn" data-i18n="back_to_list">返回列表</a>
+  <div class="car-gallery" id="gallery"></div>
+  <div class="car-details" id="carDetails"></div>
+  <div class="back-button">
+    <a href="cars.html" data-i18n="back_to_list">返回列表</a>
+  </div>
 
-  <div class="container" id="carDetailContainer">
-    <!-- 详情动态渲染 -->
+  <div class="lightbox" id="lightbox">
+    <img id="lightbox-img" src="" alt="预览图">
+    <div class="lightbox-controls">
+      <button onclick="prevImage()">←</button>
+      <button onclick="closeLightbox()">❌</button>
+      <button onclick="nextImage()">→</button>
+    </div>
   </div>
 
   <script>
-    // === 数据模拟（可替换成真实接口请求） ===
-    // 这里假设每辆车除了 cars.html 里数据外增加更多字段和多张图片示例
     const carsData = [
       {
         id: 1,
         brand: "Toyota",
         year: 2015,
-        province: "ຈຳປາສັກ",
         title_zh: "丰田卡罗拉 2015款",
         title_lo: "Toyota Corolla ປີ 2015",
         desc_zh: "自动挡，白色，行驶5万公里，保养良好",
         desc_lo: "ອັດຕະໂນມັດ, ສີຂາວ, ຂັບໄປແລ້ວ 5 ແສນກິໂລແມັດ",
-        price: 45000,
-        images: [
-          "car-images/1/1.jpg",
-          "car-images/1/2.jpg",
-          "car-images/1/3.jpg"
-        ],
-        mileage: "50,000 公里",
-        transmission_zh: "自动挡",
+        province_zh: "占巴塞",
+        province_lo: "ຈຳປາສັກ",
+        transmission_zh: "自动",
         transmission_lo: "ອັດຕະໂນມັດ",
         color_zh: "白色",
         color_lo: "ສີຂາວ",
-        engine_zh: "1.8L 自然吸气",
-        engine_lo: "1.8L ປົກກະຕິດິນແຫ່ງ",
-        contact_phone: "123-4567-890"
+        mileage: "50,000 km",
+        price: 45000,
+        img: "car-images/1/1.jpg",
+        whatsapp: "8562099194058"
       },
       {
         id: 2,
         brand: "Honda",
         year: 2018,
-        province: "ວຽງຈັນ",
         title_zh: "本田思域 2018款",
         title_lo: "Honda Civic ປີ 2018",
         desc_zh: "手动挡，红色，行驶3万公里，车况极佳",
         desc_lo: "ມືມື, ສີແດງ, ຂັບໄປແລ້ວ 3 ແສນກິໂລແມັດ",
-        price: 60000,
-        images: [
-          "car-images/2/1.jpg",
-          "car-images/2/2.jpg"
-        ],
-        mileage: "30,000 公里",
-        transmission_zh: "手动挡",
+        province_zh: "万象",
+        province_lo: "ວຽງຈັນ",
+        transmission_zh: "手动",
         transmission_lo: "ມືມື",
         color_zh: "红色",
         color_lo: "ສີແດງ",
-        engine_zh: "2.0L 涡轮增压",
-        engine_lo: "2.0L ກະເລີຍເພີ່ມເລີມ",
-        contact_phone: "987-6543-210"
+        mileage: "30,000 km",
+        price: 60000,
+        img: "car-images/2/1.jpg",
+        whatsapp: "8562099194058"
       },
       {
         id: 3,
         brand: "Volkswagen",
         year: 2017,
-        province: "ຫຼວງພຣະບາງ",
         title_zh: "大众高尔夫 2017款",
         title_lo: "Volkswagen Golf ປີ 2017",
         desc_zh: "自动挡，黑色，行驶4万公里，低油耗",
         desc_lo: "ອັດຕະໂນມັດ, ສີດຳ, ຂັບໄປແລ້ວ 4 ແສນກິໂລແມັດ",
-        price: 55000,
-        images: [
-          "car-images/3/1.jpg"
-        ],
-        mileage: "40,000 公里",
-        transmission_zh: "自动挡",
+        province_zh: "琅勃拉邦",
+        province_lo: "ຫຼວງພຣະບາງ",
+        transmission_zh: "自动",
         transmission_lo: "ອັດຕະໂນມັດ",
         color_zh: "黑色",
         color_lo: "ສີດຳ",
-        engine_zh: "1.4L 涡轮增压",
-        engine_lo: "1.4L ກະເລີຍເພີ່ມເລີມ",
-        contact_phone: "555-1234-678"
+        mileage: "40,000 km",
+        price: 55000,
+        img: "car-images/3/1.jpg",
+        whatsapp: "8562099194058"
       }
     ];
 
-    // 语言字典
     const translations = {
       zh: {
-        title: "车辆详情 - 老挝交易通",
-        page_title: "车辆详情",
+        detail_title: "车辆详情",
         back_to_list: "返回列表",
         brand: "品牌",
         year: "年份",
-        price: "价格",
-        mileage: "行驶里程",
-        transmission: "变速箱",
-        color: "颜色",
-        engine: "发动机",
         province: "省份",
+        price: "价格",
         description: "描述",
-        contact_phone: "联系电话",
-        no_data: "抱歉，未找到对应车辆信息。",
-        img_alt_prefix: "车辆图片",
-        zoom_in: "放大",
-        zoom_out: "缩小",
-        reset_zoom: "重置缩放"
+        color: "颜色",
+        transmission: "变速箱",
+        mileage: "里程",
+        buy: "点击购买"
       },
       lo: {
-        title: "ລາຍລະອຽດລົດ - ລາວການຊື້ຂາຍ",
-        page_title: "ລາຍລະອຽດລົດ",
+        detail_title: "ລາຍລະອຽດລົດ",
         back_to_list: "ກັບໄປລາຍການ",
         brand: "ຍີ່ຫໍ້",
         year: "ປີ",
-        price: "ລາຄາ",
-        mileage: "ລະຫວ່າງການຂັບຂີ່",
-        transmission: "ລະບົບການເປັນປະຕູພາຍໃນ",
-        color: "ສີ",
-        engine: "ເຄື່ອງຈັກ",
         province: "ແຂວງ",
+        price: "ລາຄາ",
         description: "ລາຍລະອຽດ",
-        contact_phone: "ເບີໂທຕິດຕໍ່",
-        no_data: "ຂໍອະໄພ, ບໍ່ພົບລາຍລະອຽດລົດທີ່ກຳນົດ.",
-        img_alt_prefix: "ຮູບພາບລົດ",
-        zoom_in: "ເຂັ້ມຂຶ້ນ",
-        zoom_out: "ລົງ",
-        reset_zoom: "ກູ້ຄືນຄ່າ"
+        color: "ສີ",
+        transmission: "ເກຍ",
+        mileage: "ລະດັບການໃຊ້ງານ",
+        buy: "ກົດສັ່ງຊື້"
       }
     };
 
-    // 读取URL参数
-    function getUrlParam(name) {
-      const url = new URL(window.location.href);
-      return url.searchParams.get(name);
+    let currentIndex = 0;
+    let currentImages = [];
+
+    function getQueryParam(key) {
+      const params = new URLSearchParams(location.search);
+      return params.get(key);
     }
 
-    let currentLang = getUrlParam("lang") || "zh";
-    if (!["zh", "lo"].includes(currentLang)) currentLang = "zh";
-
-    // 当前车辆ID
-    const carId = Number(getUrlParam("id")) || null;
+    function getLang() {
+      return getQueryParam('lang') || localStorage.getItem("siteLang") || "zh";
+    }
 
     function setLanguage(lang) {
-      currentLang = lang;
-      applyTranslations(lang);
-      renderCarDetail();
-      updateLangButtons();
-      // 更新URL参数，不刷新页面，方便分享带语言的链接
-      const url = new URL(window.location.href);
-      url.searchParams.set("lang", lang);
-      window.history.replaceState(null, "", url.toString());
+      localStorage.setItem("siteLang", lang);
+      const id = getQueryParam("id");
+      location.href = `car-detail.html?id=${id}&lang=${lang}`;
     }
 
     function applyTranslations(lang) {
@@ -355,208 +255,72 @@
         const key = el.getAttribute("data-i18n");
         if (dict[key]) el.textContent = dict[key];
       });
-      document.title = dict.title || "车辆详情";
-      document.querySelector("h1")?.setAttribute("data-i18n", "page_title");
     }
 
-    function updateLangButtons() {
-      document.getElementById("btnZh").disabled = currentLang === "zh";
-      document.getElementById("btnLo").disabled = currentLang === "lo";
-    }
-
-    // 放大缩小功能变量
-    let currentScale = 1;
-    let isDragging = false;
-    let dragStart = { x: 0, y: 0 };
-    let imgOffset = { x: 0, y: 0 };
-
-    function resetZoom(img) {
-      currentScale = 1;
-      img.style.transform = `translate(-50%, -50%) scale(${currentScale}) translate(0, 0)`;
-      imgOffset = { x: 0, y: 0 };
-    }
-
-    function zoomIn(img) {
-      if (currentScale < 3) currentScale += 0.2;
-      applyTransform(img);
-    }
-    function zoomOut(img) {
-      if (currentScale > 1) currentScale -= 0.2;
-      applyTransform(img);
-    }
-    function applyTransform(img) {
-      img.style.transform = `translate(calc(-50% + ${imgOffset.x}px), calc(-50% + ${imgOffset.y}px)) scale(${currentScale})`;
-    }
-
-    function initImageDragging(img, container) {
-      container.onmousedown = e => {
-        if (currentScale <= 1) return;
-        isDragging = true;
-        dragStart = { x: e.clientX - imgOffset.x, y: e.clientY - imgOffset.y };
-        container.classList.add("grabbing");
-      };
-      window.onmouseup = () => {
-        if (isDragging) {
-          isDragging = false;
-          container.classList.remove("grabbing");
-        }
-      };
-      window.onmousemove = e => {
-        if (!isDragging) return;
-        e.preventDefault();
-        imgOffset.x = e.clientX - dragStart.x;
-        imgOffset.y = e.clientY - dragStart.y;
-        applyTransform(img);
-      };
-    }
-
-    // 渲染详情页内容
     function renderCarDetail() {
-      const container = document.getElementById("carDetailContainer");
-      container.innerHTML = "";
-
-      if (!carId) {
-        container.innerHTML = `<div class="no-data">${translations[currentLang].no_data}</div>`;
-        return;
-      }
-
-      const car = carsData.find(c => c.id === carId);
+      const id = parseInt(getQueryParam("id"));
+      const lang = getLang();
+      applyTranslations(lang);
+      const car = carsData.find(c => c.id === id);
       if (!car) {
-        container.innerHTML = `<div class="no-data">${translations[currentLang].no_data}</div>`;
+        document.getElementById("carDetails").innerHTML = "<p>车辆信息未找到。</p>";
         return;
       }
 
-      // 多图展示容器
-      const gallery = document.createElement("div");
-      gallery.className = "gallery";
-
-      // 主图容器
-      const mainImageContainer = document.createElement("div");
-      mainImageContainer.className = "main-image-container";
-
-      // 放大缩小按钮
-      const zoomControls = document.createElement("div");
-      zoomControls.className = "zoom-controls";
-
-      const btnZoomIn = document.createElement("button");
-      btnZoomIn.textContent = translations[currentLang].zoom_in;
-      const btnZoomOut = document.createElement("button");
-      btnZoomOut.textContent = translations[currentLang].zoom_out;
-      const btnResetZoom = document.createElement("button");
-      btnResetZoom.textContent = translations[currentLang].reset_zoom;
-
-      zoomControls.appendChild(btnZoomIn);
-      zoomControls.appendChild(btnZoomOut);
-      zoomControls.appendChild(btnResetZoom);
-
-      mainImageContainer.appendChild(zoomControls);
-
-      const mainImg = document.createElement("img");
-      mainImg.src = car.images[0];
-      mainImg.alt = `${translations[currentLang].img_alt_prefix} 1`;
-      mainImageContainer.appendChild(mainImg);
-
-      gallery.appendChild(mainImageContainer);
-
-      // 缩略图条
-      const thumbnails = document.createElement("div");
-      thumbnails.className = "thumbnails";
-
-      car.images.forEach((imgSrc, index) => {
-        const thumb = document.createElement("img");
-        thumb.src = imgSrc;
-        thumb.alt = `${translations[currentLang].img_alt_prefix} ${index + 1}`;
-        if (index === 0) thumb.classList.add("selected");
-        thumb.onclick = () => {
-          mainImg.src = imgSrc;
-          mainImg.alt = `${translations[currentLang].img_alt_prefix} ${index + 1}`;
-          // 选中效果
-          thumbnails.querySelectorAll("img").forEach(i => i.classList.remove("selected"));
-          thumb.classList.add("selected");
-          resetZoom(mainImg);
-        };
-        thumbnails.appendChild(thumb);
-      });
-
-      gallery.appendChild(thumbnails);
-
-      // 初始化缩放拖拽
-      resetZoom(mainImg);
-      initImageDragging(mainImg, mainImageContainer);
-
-      // 详情信息区
-      const details = document.createElement("div");
-      details.className = "details";
-
-      const title = document.createElement("div");
-      title.className = "title";
-      title.textContent = currentLang === "lo" ? car.title_lo : car.title_zh;
-
-      const price = document.createElement("div");
-      price.className = "price";
-      price.textContent = `${car.price} USD`;
-
-      const infoRows = document.createElement("div");
-
-      function createInfoRow(labelKey, value) {
-        const row = document.createElement("div");
-        row.className = "info-row";
-
-        const label = document.createElement("span");
-        label.style.fontWeight = "600";
-        label.textContent = translations[currentLang][labelKey] + ":";
-
-        const val = document.createElement("span");
-        val.textContent = value || "-";
-
-        row.appendChild(label);
-        row.appendChild(val);
-        return row;
+      const gallery = document.getElementById("gallery");
+      gallery.innerHTML = "";
+      currentImages = [];
+      for (let i = 1; i <= 6; i++) {
+        // 假设图片路径规则：car-images/{id}/{i}.jpg
+        const imgPath = `car-images/${car.id}/${i}.jpg`;
+        currentImages.push(imgPath);
+        const img = document.createElement("img");
+        img.src = imgPath;
+        img.alt = lang === 'lo' ? car.title_lo : car.title_zh;
+        img.onclick = () => openLightbox(i - 1);
+        gallery.appendChild(img);
       }
 
-      infoRows.appendChild(createInfoRow("brand", car.brand));
-      infoRows.appendChild(createInfoRow("year", car.year));
-      infoRows.appendChild(createInfoRow("province", car.province));
-      infoRows.appendChild(createInfoRow("mileage", car.mileage));
-      infoRows.appendChild(createInfoRow("transmission", currentLang === "lo" ? car.transmission_lo : car.transmission_zh));
-      infoRows.appendChild(createInfoRow("color", currentLang === "lo" ? car.color_lo : car.color_zh));
-      infoRows.appendChild(createInfoRow("engine", currentLang === "lo" ? car.engine_lo : car.engine_zh));
-      infoRows.appendChild(createInfoRow("contact_phone", car.contact_phone));
+      const detailBox = document.getElementById("carDetails");
+      const province = lang === 'lo' ? car.province_lo : car.province_zh;
+      const transmission = lang === 'lo' ? car.transmission_lo : car.transmission_zh;
+      const color = lang === 'lo' ? car.color_lo : car.color_zh;
+      const title = lang === 'lo' ? car.title_lo : car.title_zh;
 
-      const descTitle = document.createElement("h3");
-      descTitle.textContent = translations[currentLang].description;
+      // WhatsApp链接，带国家码（无+），文本包含标题和当前网址
+      const whatsappLink = `https://wa.me/${car.whatsapp}?text=${encodeURIComponent(title)}%0A${encodeURIComponent(window.location.href)}`;
 
-      const desc = document.createElement("div");
-      desc.className = "description";
-      desc.textContent = currentLang === "lo" ? car.desc_lo : car.desc_zh;
-
-      details.appendChild(title);
-      details.appendChild(price);
-      details.appendChild(infoRows);
-      details.appendChild(descTitle);
-      details.appendChild(desc);
-
-      container.appendChild(gallery);
-      container.appendChild(details);
+      detailBox.innerHTML = `
+        <div><span class="label">${translations[lang].brand}:</span> ${car.brand}</div>
+        <div><span class="label">${translations[lang].year}:</span> ${car.year}</div>
+        <div><span class="label">${translations[lang].province}:</span> ${province}</div>
+        <div><span class="label">${translations[lang].transmission}:</span> ${transmission}</div>
+        <div><span class="label">${translations[lang].color}:</span> ${color}</div>
+        <div><span class="label">${translations[lang].mileage}:</span> ${car.mileage}</div>
+        <div><span class="label">${translations[lang].price}:</span> ${car.price} USD</div>
+        <div><span class="label">${translations[lang].description}:</span> ${lang === 'lo' ? car.desc_lo : car.desc_zh}</div>
+        <a class="btn-buy" href="${whatsappLink}" target="_blank" rel="noopener noreferrer">${translations[lang].buy}</a>
+      `;
     }
 
-    // 返回列表时保持语言和分页信息
-    function initBackButton() {
-      const backBtn = document.getElementById("backBtn");
-      // 从列表页跳转后保留分页页码参数，默认跳到第一页
-      const currentPage = localStorage.getItem("carsCurrentPage") || 1;
-      const langParam = currentLang;
-      backBtn.href = `cars.html?lang=${langParam}&page=${currentPage}`;
-      backBtn.setAttribute("data-i18n", "back_to_list");
+    function openLightbox(index) {
+      currentIndex = index;
+      document.getElementById("lightbox-img").src = currentImages[currentIndex];
+      document.getElementById("lightbox").style.display = "flex";
+    }
+    function closeLightbox() {
+      document.getElementById("lightbox").style.display = "none";
+    }
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % currentImages.length;
+      document.getElementById("lightbox-img").src = currentImages[currentIndex];
+    }
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+      document.getElementById("lightbox-img").src = currentImages[currentIndex];
     }
 
-    // 页面初始化
-    document.addEventListener("DOMContentLoaded", () => {
-      applyTranslations(currentLang);
-      updateLangButtons();
-      renderCarDetail();
-      initBackButton();
-    });
+    document.addEventListener("DOMContentLoaded", renderCarDetail);
   </script>
 </body>
 </html>
