@@ -55,14 +55,15 @@
       padding: 20px;
       border-radius: 12px;
       border: 1px solid rgba(0,255,255,0.2);
+      font-size: 1em;
     }
     .car-details div {
       margin-bottom: 12px;
-      font-size: 1em;
     }
     .label {
       color: #00ffe0;
       margin-right: 6px;
+      font-weight: 600;
     }
     .btn-buy {
       display: inline-block;
@@ -73,6 +74,7 @@
       text-decoration: none;
       font-weight: bold;
       margin-top: 20px;
+      user-select: none;
     }
     .back-button {
       display: block;
@@ -86,7 +88,9 @@
       border-radius: 30px;
       text-decoration: none;
       font-weight: bold;
+      user-select: none;
     }
+    /* 大图弹窗 */
     .lightbox {
       display: none;
       position: fixed;
@@ -94,13 +98,16 @@
       background: rgba(0,0,0,0.9);
       justify-content: center;
       align-items: center;
-      z-index: 999;
+      z-index: 9999;
       flex-direction: column;
+      user-select: none;
     }
     .lightbox img {
       max-width: 90%;
       max-height: 80%;
       margin-bottom: 10px;
+      cursor: grab;
+      transition: transform 0.3s ease;
     }
     .lightbox-controls {
       display: flex;
@@ -115,6 +122,7 @@
       border-radius: 10px;
       font-weight: bold;
       cursor: pointer;
+      user-select: none;
     }
   </style>
 </head>
@@ -133,72 +141,88 @@
   </div>
 
   <div class="lightbox" id="lightbox">
-    <img id="lightbox-img" src="" alt="预览图">
+    <img id="lightbox-img" src="" alt="预览图" />
     <div class="lightbox-controls">
       <button onclick="prevImage()">←</button>
       <button onclick="closeLightbox()">❌</button>
       <button onclick="nextImage()">→</button>
+      <button id="zoomInBtn">放大 +</button>
+      <button id="zoomOutBtn">缩小 -</button>
+      <button id="resetZoomBtn">重置</button>
     </div>
   </div>
 
   <script>
+    // 车辆数据（添加 model 字段用于型号，model_zh 和 model_lo）
     const carsData = [
       {
         id: 1,
         brand: "Toyota",
+        brand_zh: "丰田",
+        brand_lo: "Toyota",
+        model_zh: "卡罗拉",
+        model_lo: "Corolla",
         year: 2015,
-        title_zh: "丰田卡罗拉 2015款",
-        title_lo: "Toyota Corolla ປີ 2015",
-        desc_zh: "自动挡，白色，行驶5万公里，保养良好",
-        desc_lo: "ອັດຕະໂນມັດ, ສີຂາວ, ຂັບໄປແລ້ວ 5 ແສນກິໂລແມັດ",
-        province_zh: "占巴塞",
-        province_lo: "ຈຳປາສັກ",
+        steering_zh: "左侧",
+        steering_lo: "ຊ້າຍເດີມ",
         transmission_zh: "自动",
-        transmission_lo: "ອັດຕະໂນມັດ",
+        transmission_lo: "ໂອໂຕ້",
         color_zh: "白色",
         color_lo: "ສີຂາວ",
         mileage: "50,000 km",
+        paperwork_zh: "齐全",
+        paperwork_lo: "100%",
+        other_zh: "保养良好",
+        other_lo: "ສະພາບດີ, ບໍ່ຕຳ, ບໍ່ປີ້ນ",
         price: 45000,
-        img: "car-images/1/1.jpg",
+        imgCount: 6,
         whatsapp: "8562099194058"
       },
       {
         id: 2,
         brand: "Honda",
+        brand_zh: "本田",
+        brand_lo: "Honda",
+        model_zh: "思域",
+        model_lo: "Civic",
         year: 2018,
-        title_zh: "本田思域 2018款",
-        title_lo: "Honda Civic ປີ 2018",
-        desc_zh: "手动挡，红色，行驶3万公里，车况极佳",
-        desc_lo: "ມືມື, ສີແດງ, ຂັບໄປແລ້ວ 3 ແສນກິໂລແມັດ",
-        province_zh: "万象",
-        province_lo: "ວຽງຈັນ",
+        steering_zh: "右侧",
+        steering_lo: "ຍ້າຍພວງ",
         transmission_zh: "手动",
-        transmission_lo: "ມືມື",
+        transmission_lo: "ກະປຸກ",
         color_zh: "红色",
         color_lo: "ສີແດງ",
         mileage: "30,000 km",
+        paperwork_zh: "齐全",
+        paperwork_lo: "ຄົບຖ້ວນ",
+        other_zh: "车况极佳",
+        other_lo: "ສະພາບລົດດີ, ບໍ່ມີຕຳນິ",
         price: 60000,
-        img: "car-images/2/1.jpg",
-        whatsapp: "8562099194058"
+        imgCount: 6,
+        whatsapp: "8562099194059"
       },
       {
         id: 3,
         brand: "Volkswagen",
+        brand_zh: "大众",
+        brand_lo: "Volkswagen",
+        model_zh: "高尔夫",
+        model_lo: "Golf",
         year: 2017,
-        title_zh: "大众高尔夫 2017款",
-        title_lo: "Volkswagen Golf ປີ 2017",
-        desc_zh: "自动挡，黑色，行驶4万公里，低油耗",
-        desc_lo: "ອັດຕະໂນມັດ, ສີດຳ, ຂັບໄປແລ້ວ 4 ແສນກິໂລແມັດ",
-        province_zh: "琅勃拉邦",
-        province_lo: "ຫຼວງພຣະບາງ",
+        steering_zh: "左侧",
+        steering_lo: "ຊ້າຍ",
         transmission_zh: "自动",
         transmission_lo: "ອັດຕະໂນມັດ",
         color_zh: "黑色",
         color_lo: "ສີດຳ",
         mileage: "40,000 km",
+        paperwork_zh: "齐全",
+        paperwork_lo: "ຄົບຖ້ວນ",
+        other_zh: "低油耗",
+        other_lo: "ໃຊ້ນ້ຳມັນຕ່ຳ",
         price: 55000,
-        img: "car-images/3/1.jpg",
-        whatsapp: "8562099194058"
+        imgCount: 6,
+        whatsapp: "8562099194060"
       }
     ];
 
@@ -207,32 +231,37 @@
         detail_title: "车辆详情",
         back_to_list: "返回列表",
         brand: "品牌",
+        model: "型号",
         year: "年份",
-        province: "省份",
-        price: "价格",
-        description: "描述",
-        color: "颜色",
+        steering: "方向盘",
         transmission: "变速箱",
-        mileage: "里程",
+        color: "颜色",
+        mileage: "公里数",
+        paperwork: "手续",
+        other: "其它详细",
+        price: "价格",
         buy: "点击购买"
       },
       lo: {
         detail_title: "ລາຍລະອຽດລົດ",
         back_to_list: "ກັບໄປລາຍການ",
         brand: "ຍີ່ຫໍ້",
+        model: "ຮູ້ນ",
         year: "ປີ",
-        province: "ແຂວງ",
-        price: "ລາຄາ",
-        description: "ລາຍລະອຽດ",
-        color: "ສີ",
+        steering: "ພວງມາໄລ",
         transmission: "ເກຍ",
-        mileage: "ລະດັບການໃຊ້ງານ",
+        color: "ສີ",
+        mileage: "ໄລຍະໃຊ້ງານ",
+        paperwork: "ເອກະສານ",
+        other: "ລາຍລະອຽດເພີ່ມເຕີມ",
+        price: "ລາຄາ",
         buy: "ກົດສັ່ງຊື້"
       }
     };
 
     let currentIndex = 0;
     let currentImages = [];
+    let zoomLevel = 1;
 
     function getQueryParam(key) {
       const params = new URLSearchParams(location.search);
@@ -267,11 +296,11 @@
         return;
       }
 
+      // 生成图片列表
       const gallery = document.getElementById("gallery");
       gallery.innerHTML = "";
       currentImages = [];
-      for (let i = 1; i <= 6; i++) {
-        // 假设图片路径规则：car-images/{id}/{i}.jpg
+      for (let i = 1; i <= car.imgCount; i++) {
         const imgPath = `car-images/${car.id}/${i}.jpg`;
         currentImages.push(imgPath);
         const img = document.createElement("img");
@@ -281,31 +310,41 @@
         gallery.appendChild(img);
       }
 
+      // 构造WhatsApp消息文本
+      const brand = lang === 'lo' ? car.brand_lo : car.brand_zh;
+      const model = lang === 'lo' ? car.model_lo : car.model_zh;
+      const price = car.price;
+
+      const whatsappText = lang === 'lo'
+        ? `ຂ້ອຍຕ້ອງການຊື້ລົດ ${brand} ${model} ລາຄາ ${price} USD\n${window.location.href}`
+        : `我想购买 ${brand} ${model} ${price} USD\n${window.location.href}`;
+
+      const whatsappLink = `https://wa.me/${car.whatsapp}?text=${encodeURIComponent(whatsappText)}`;
+
+      // 显示车辆详细信息
       const detailBox = document.getElementById("carDetails");
-      const province = lang === 'lo' ? car.province_lo : car.province_zh;
-      const transmission = lang === 'lo' ? car.transmission_lo : car.transmission_zh;
-      const color = lang === 'lo' ? car.color_lo : car.color_zh;
-      const title = lang === 'lo' ? car.title_lo : car.title_zh;
-
-      // WhatsApp链接，带国家码（无+），文本包含标题和当前网址
-      const whatsappLink = `https://wa.me/${car.whatsapp}?text=${encodeURIComponent(title)}%0A${encodeURIComponent(window.location.href)}`;
-
       detailBox.innerHTML = `
-        <div><span class="label">${translations[lang].brand}:</span> ${car.brand}</div>
+        <div><span class="label">${translations[lang].brand}:</span> ${brand}</div>
+        <div><span class="label">${translations[lang].model}:</span> ${model}</div>
         <div><span class="label">${translations[lang].year}:</span> ${car.year}</div>
-        <div><span class="label">${translations[lang].province}:</span> ${province}</div>
-        <div><span class="label">${translations[lang].transmission}:</span> ${transmission}</div>
-        <div><span class="label">${translations[lang].color}:</span> ${color}</div>
+        <div><span class="label">${translations[lang].steering}:</span> ${lang === 'lo' ? car.steering_lo : car.steering_zh}</div>
+        <div><span class="label">${translations[lang].transmission}:</span> ${lang === 'lo' ? car.transmission_lo : car.transmission_zh}</div>
+        <div><span class="label">${translations[lang].color}:</span> ${lang === 'lo' ? car.color_lo : car.color_zh}</div>
         <div><span class="label">${translations[lang].mileage}:</span> ${car.mileage}</div>
-        <div><span class="label">${translations[lang].price}:</span> ${car.price} USD</div>
-        <div><span class="label">${translations[lang].description}:</span> ${lang === 'lo' ? car.desc_lo : car.desc_zh}</div>
+        <div><span class="label">${translations[lang].paperwork}:</span> ${lang === 'lo' ? car.paperwork_lo : car.paperwork_zh}</div>
+        <div><span class="label">${translations[lang].other}:</span> ${lang === 'lo' ? car.other_lo : car.other_zh}</div>
+        <div><span class="label">${translations[lang].price}:</span> ${price} USD</div>
         <a class="btn-buy" href="${whatsappLink}" target="_blank" rel="noopener noreferrer">${translations[lang].buy}</a>
       `;
     }
 
+    // 大图弹窗相关
     function openLightbox(index) {
       currentIndex = index;
-      document.getElementById("lightbox-img").src = currentImages[currentIndex];
+      zoomLevel = 1;
+      const img = document.getElementById("lightbox-img");
+      img.style.transform = `scale(${zoomLevel})`;
+      img.src = currentImages[currentIndex];
       document.getElementById("lightbox").style.display = "flex";
     }
     function closeLightbox() {
@@ -313,12 +352,34 @@
     }
     function nextImage() {
       currentIndex = (currentIndex + 1) % currentImages.length;
-      document.getElementById("lightbox-img").src = currentImages[currentIndex];
+      zoomLevel = 1;
+      const img = document.getElementById("lightbox-img");
+      img.style.transform = `scale(${zoomLevel})`;
+      img.src = currentImages[currentIndex];
     }
     function prevImage() {
       currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
-      document.getElementById("lightbox-img").src = currentImages[currentIndex];
+      zoomLevel = 1;
+      const img = document.getElementById("lightbox-img");
+      img.style.transform = `scale(${zoomLevel})`;
+      img.src = currentImages[currentIndex];
     }
+
+    // 缩放按钮
+    document.getElementById("zoomInBtn").addEventListener("click", () => {
+      zoomLevel += 0.2;
+      if (zoomLevel > 5) zoomLevel = 5;
+      document.getElementById("lightbox-img").style.transform = `scale(${zoomLevel})`;
+    });
+    document.getElementById("zoomOutBtn").addEventListener("click", () => {
+      zoomLevel -= 0.2;
+      if (zoomLevel < 1) zoomLevel = 1;
+      document.getElementById("lightbox-img").style.transform = `scale(${zoomLevel})`;
+    });
+    document.getElementById("resetZoomBtn").addEventListener("click", () => {
+      zoomLevel = 1;
+      document.getElementById("lightbox-img").style.transform = `scale(${zoomLevel})`;
+    });
 
     document.addEventListener("DOMContentLoaded", renderCarDetail);
   </script>
